@@ -1,0 +1,2 @@
+DB_PATH = '/home/seth/Projects/vistorvebot/mydb.db'
+DEBUG = True

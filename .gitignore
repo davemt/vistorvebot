@@ -25,3 +25,13 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+# sqllite
+*.db
+
+# Django
+localsettings.py
+server/static/*
+
+# Stupid Emacs
+*~
