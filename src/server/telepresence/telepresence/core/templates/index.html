@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block copy %}
+<div style="height:250px;">
+    {% if not user.is_authenticated %}
+    <div id="login">
+        <form id="login_form" method="post" action="{% url login %}">
+            {% csrf_token %}
+            {{ form.redirect_url }}
+            {% if login_error %}
+            <div class="error">
+              {{ login_error }}
+            </div>
+            {% endif %}
+            <table>
+                <tbody>
+                    <tr>
+                        <td><label for="id_username">Username:</label></td>
+                        <td><input type="text" id="id_username" name="username"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="id_password">Password:</label></td>
+                        <td><input type="password" id="id_password" name="password"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="submit">
+                <label>&nbsp;</label><input type="submit" id="login_form_submit" value="Log in" role="button" aria-disabled="false">
+            </div>
+        </form>
+    </div>
+    {% else %}
+    <div id="login_success">
+        <h1>Welcome to the MACHINE!</h1>
+    </div>
+    {% endif %}
+    <img style="position:relative; top: 5px;" src="{{ STATIC_URL }}images/mechascorpiones.jpg"/>
+</div>
+{% endblock %}

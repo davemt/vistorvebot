@@ -1,0 +1,122 @@
+@charset "utf-8";
+html {
+        height:100%;
+}
+body {
+        background-color: #FFF;
+        margin-top:0px;
+        margin-left:0px;
+        margin-right:0px;
+        margin-bottom:0px;
+        padding-bottom:20px;
+        font-family: Georgia, "Times New Roman", Times, serif;
+        font-size:14px;
+        font-style:italic;
+        color:#000;
+}
+a {
+        text-decoration:none;
+        color:#9b8658;
+}
+a:hover {
+        text-decoration:none;
+        color:#000;
+}
+#left-corner {
+        background-image: url(../images/shadow-left.jpg);
+        background-position:left;
+        background-repeat: no-repeat;
+        width:100%;
+        height:230px;
+}
+#right-corner {
+        background-image: url(../images/shadow-right.jpg);
+        background-position:right;
+        background-repeat: no-repeat;
+        width:100%;
+        height:230px;
+}
+#content {
+        width: 960px;
+        margin-left:auto;
+        margin-right:auto;
+}
+#logo {
+        width:236px;
+        height:95px;
+        padding-top:40px;
+        margin-left:auto;
+        margin-right:auto;
+}
+#main-nav {
+        width:523px;
+        margin-top:20px;
+        margin-left:auto;
+        margin-right:auto;
+}
+.nav-text {
+        float: left;
+        position: relative;
+        left: 200px;
+        height:102px;
+        font-size: 1.2em;
+}
+
+.nav-bar {
+    float: left;
+    height:102px;
+    margin-top: 15px;
+}
+
+.dimensions {
+        margin-top:-24px;
+}
+.divider-grad {
+        width:866px;
+        height:18px;
+        background-image:url(../images/divider-grad.jpg);
+        background-repeat:no-repeat;
+        clear:both;
+        margin-left:auto;
+        margin-right:auto;
+        margin-top:10px;
+        margin-bottom:10px;
+}
+.footer-grad {
+        width:866px;
+        height:18px;
+        background-image:url(../images/footer-grad.jpg);
+        background-repeat:no-repeat;
+        clear:both;
+        margin-left:auto;
+        margin-right:auto;
+}
+.copy {
+        clear:both;
+        width:960px;
+        margin-left:auto;
+        margin-right:auto;
+        text-align:center;
+}
+.classification {
+        clear:both;
+        width:960px;
+        text-align:center;
+        margin-left:auto;
+        margin-right:auto;
+        font-size:16px;
+}
+h2 {
+        font-size:24px;
+        text-align:center;
+        font-weight:normal;
+        padding:0px;
+        margin:10px;
+        clear:both;
+}
+h3 {
+        font-size:18px;
+        text-align:center;
+        font-weight:normal;
+        margin-bottom:100px;
+}

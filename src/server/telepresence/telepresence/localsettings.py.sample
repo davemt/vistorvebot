@@ -1,2 +1,3 @@
 DB_PATH = '/home/seth/Projects/vistorvebot/mydb.db'
 DEBUG = True
+STATIC_ROOT = '/home/seth/Projects/vistorvebot/src/server/static'
