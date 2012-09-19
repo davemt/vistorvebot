@@ -9,6 +9,10 @@ def index(request):
     return render_to_response('index.html', {
     }, context_instance=RequestContext(request))
 
+def about(request):
+    return render_to_response('about.html', {
+    }, context_instance=RequestContext(request))
+
 def login_user(request, template='index.html', redirect_url=None):
 
     def handle_login_error(login_error):

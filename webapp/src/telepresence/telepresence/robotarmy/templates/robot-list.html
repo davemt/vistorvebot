@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block copy %}
+<div style="height:250px;">
+  <div class="table_wrapper" id="robot_list">
+    <table>
+      {% for robot in robots %}
+      <tr>
+        <td style="font-weight: bold">{{ robot.name }}</td>
+        <td class="robot_status {{ robot.state }}">{{ robot.get_state_display }}</td>
+        <td><input data-robot-id="{{ robot.pk }}" type="button" value="Join Me?" {% if robot.state != "ready" %} disabled="true" {% endif %}></input></td>
+      </tr>
+      {% endfor %}
+      </table>
+  </div>
+</div>
+{% endblock %}

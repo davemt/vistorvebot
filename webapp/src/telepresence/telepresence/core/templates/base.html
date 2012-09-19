@@ -17,9 +17,9 @@
             <div id="logo"><a href="/"><img src="{{ STATIC_URL }}images/vistorvebot-logo.gif" alt="Arthrobots" width="236" height="95" border="0" /></a></div>
             <div id="main-nav">
               <div class="nav-text" >
-                <a href="robot_list.html">ROBOTS!</a>
+                <a href="{% url robot-list %}">ROBOTS!</a>
                 |
-                <a href="about.html">ABOUT?</a>
+                <a href="{% url about-robots %}">ABOUT?</a>
               </div>
               <div class="nav-bar" style="width:300px;"> <img src="{{ STATIC_URL }}images/nav-bar.jpg"/> </div>
             </div>

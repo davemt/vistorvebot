@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block copy %}
+<div style="height:250px;">
+    <div id="about">
+      VistorveBOT is a one-stop shop for all of your telepresensce needs!
+      <br>
+      Select a robot from the <a href="{% url robot-list %}">ROBOTS!</a> list to begin.
+    </div>
+    <a href="{% url robot-list %}">
+      <img style="position:relative; top: 30px;" src="{{ STATIC_URL }}images/lepidopteroid.jpg"/>
+    </a>
+</div>
+{% endblock %}
