@@ -43,10 +43,14 @@
 <h3>Simple Hangout App</h3>
 
 <p>
+<table>
+<tr><td/><td><input class="button" type="button" value="forward" id="vistorveForward" onClick="vistorveForward()"></td><td/>
+<tr><td><input class="button" type="button" value="left" id="vistorveLeft" onClick="vistorveLeft()"></td><td/><td><input class="button" type="button" value="right" id="vistorveRight" onClick="vistorveRight()"><td/>
+</table>
+
 <input class="button" type="button" value="Show participants!" id="showParticipants" 
     style="visibility:hidden;"
     onClick="showParticipants()"/>
-<input class="button" type="button" value="forward" id="vistorveForward" onClick="vistorveForward()">
 </p>
 
 <div id="participantsDiv"></div>
@@ -60,6 +64,14 @@ var socket = new WebSocket("ws://172.29.208.44:9435/control");
 
 function vistorveForward() {
   socket.send("VISTORVE.FORWARD");
+}
+
+function vistorveLeft() {
+  socket.send("VISTORVE.LEFT");
+}
+
+function vistorveRight() {
+  socket.send("VISTORVE.RIGHT");
 }
 
 function showParticipants() {
