@@ -1,0 +1,172 @@
+[0.000][INFO]:      ChromeDriver 23.0.1240.0 /home/dave/virtualenvs/vistorvebot/bin/chromedriver
+[0.985][FINE]:      Initializing session with capabilities {
+   "browserName": "chrome",
+   "chromeOptions": {
+      "args": [  ],
+      "binary": "",
+      "extensions": [  ]
+   },
+   "javascriptEnabled": true,
+   "platform": "ANY",
+   "version": ""
+}
+
+[0.986][INFO]:      Launching chrome: /usr/bin/chromium-browser --enable-logging --log-level=1 --disable-hang-monitor --disable-prompt-on-repost --dom-automation --full-memory-crash-report --no-default-browser-check --no-first-run --disable-background-networking --disable-sync --disable-translate --disable-web-resources --safebrowsing-disable-auto-update --safebrowsing-disable-download-protection --disable-client-side-phishing-detection --disable-component-update --disable-default-apps --password-store=basic --ignore-certificate-errors about:blank
+[1.574][INFO]:      Connected to Chrome successfully. Version: 20.0.1132.47
+[1.632][FINE]:      Command received (/session/d1b72d29de0760042a0f72fca69dae39)
+[1.632][FINE]:      Command finished (/session/d1b72d29de0760042a0f72fca69dae39) with response {
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39",
+   "status": 0,
+   "value": {
+      "acceptSslCerts": false,
+      "applicationCacheEnabled": false,
+      "browserConnectionEnabled": false,
+      "browserName": "chrome",
+      "chrome.chromedriverVersion": "23.0.1240.0",
+      "chrome.nativeEvents": false,
+      "cssSelectorsEnabled": true,
+      "databaseEnabled": false,
+      "handlesAlerts": true,
+      "javascriptEnabled": true,
+      "locationContextEnabled": false,
+      "nativeEvents": true,
+      "platform": "linux",
+      "rotatable": false,
+      "takesScreenshot": true,
+      "version": "20.0.1132.47",
+      "webStorageEnabled": true
+   }
+}
+
+[1.633][FINE]:      Command received (/session/d1b72d29de0760042a0f72fca69dae39/timeouts/implicit_wait) with params {
+   "ms": 60000.0,
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39"
+}
+
+[1.633][FINER]:     Waiting for all views to stop loading...
+[1.634][FINER]:     Done waiting for all views to stop loading
+[1.634][FINER]:     Waiting for all views to stop loading...
+[1.634][FINER]:     Done waiting for all views to stop loading
+[1.634][FINE]:      Command finished (/session/d1b72d29de0760042a0f72fca69dae39/timeouts/implicit_wait) with response {
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[1.635][FINE]:      Command received (/session/d1b72d29de0760042a0f72fca69dae39/cookie)
+[1.635][FINER]:     Waiting for all views to stop loading...
+[1.635][FINER]:     Done waiting for all views to stop loading
+[1.656][FINER]:     Waiting for all views to stop loading...
+[1.661][FINER]:     Done waiting for all views to stop loading
+[1.661][FINE]:      Command finished (/session/d1b72d29de0760042a0f72fca69dae39/cookie) with response {
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39",
+   "status": 0,
+   "value": [  ]
+}
+
+[1.663][FINE]:      Command received (/session/d1b72d29de0760042a0f72fca69dae39/url) with params {
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39",
+   "url": "https://accounts.google.com/Login"
+}
+
+[1.663][FINER]:     Waiting for all views to stop loading...
+[1.664][FINER]:     Done waiting for all views to stop loading
+[3.240][FINER]:     Waiting for all views to stop loading...
+[3.243][FINER]:     Done waiting for all views to stop loading
+[3.243][FINE]:      Command finished (/session/d1b72d29de0760042a0f72fca69dae39/url) with response {
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[3.245][FINE]:      Command received (/session/d1b72d29de0760042a0f72fca69dae39/element) with params {
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39",
+   "using": "id",
+   "value": "Email"
+}
+
+[3.245][FINER]:     Waiting for all views to stop loading...
+[3.245][FINER]:     Done waiting for all views to stop loading
+[3.261][FINER]:     Waiting for all views to stop loading...
+[3.262][FINER]:     Done waiting for all views to stop loading
+[3.262][FINE]:      Command finished (/session/d1b72d29de0760042a0f72fca69dae39/element) with response {
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39",
+   "status": 0,
+   "value": {
+      "ELEMENT": ":wdc:1351207213624"
+   }
+}
+
+[3.264][FINE]:      Command received (/session/d1b72d29de0760042a0f72fca69dae39/element/:wdc:1351207213624/value) with params {
+   "id": ":wdc:1351207213624",
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39",
+   "value": [ "t", "e", "l", "e", "p", "r", "e", "s", "e", "n", "t", "0", "0", "1" ]
+}
+
+[3.264][FINER]:     Waiting for all views to stop loading...
+[3.264][FINER]:     Done waiting for all views to stop loading
+[3.457][FINER]:     Waiting for all views to stop loading...
+[3.458][FINER]:     Done waiting for all views to stop loading
+[3.458][FINE]:      Command finished (/session/d1b72d29de0760042a0f72fca69dae39/element/:wdc:1351207213624/value) with response {
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[3.460][FINE]:      Command received (/session/d1b72d29de0760042a0f72fca69dae39/element) with params {
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39",
+   "using": "id",
+   "value": "Passwd"
+}
+
+[3.460][FINER]:     Waiting for all views to stop loading...
+[3.461][FINER]:     Done waiting for all views to stop loading
+[3.483][FINER]:     Waiting for all views to stop loading...
+[3.484][FINER]:     Done waiting for all views to stop loading
+[3.484][FINE]:      Command finished (/session/d1b72d29de0760042a0f72fca69dae39/element) with response {
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39",
+   "status": 0,
+   "value": {
+      "ELEMENT": ":wdc:1351207213625"
+   }
+}
+
+[3.485][FINE]:      Command received (/session/d1b72d29de0760042a0f72fca69dae39/element/:wdc:1351207213625/value) with params {
+   "id": ":wdc:1351207213625",
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39",
+   "value": [ "s", "e", "l", "e", "n", "i", "u", "m" ]
+}
+
+[3.485][FINER]:     Waiting for all views to stop loading...
+[3.485][FINER]:     Done waiting for all views to stop loading
+[3.611][FINER]:     Waiting for all views to stop loading...
+[3.611][FINER]:     Done waiting for all views to stop loading
+[3.611][FINE]:      Command finished (/session/d1b72d29de0760042a0f72fca69dae39/element/:wdc:1351207213625/value) with response {
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[3.613][FINE]:      Command received (/session/d1b72d29de0760042a0f72fca69dae39/element/:wdc:1351207213625/submit) with params {
+   "id": ":wdc:1351207213625",
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39"
+}
+
+[3.613][FINER]:     Waiting for all views to stop loading...
+[3.613][FINER]:     Done waiting for all views to stop loading
+[3.654][FINER]:     Waiting for all views to stop loading...
+[4.705][FINER]:     Done waiting for all views to stop loading
+[4.705][FINE]:      Command finished (/session/d1b72d29de0760042a0f72fca69dae39/element/:wdc:1351207213625/submit) with response {
+   "sessionId": "d1b72d29de0760042a0f72fca69dae39",
+   "status": 0,
+   "value": null
+}
+

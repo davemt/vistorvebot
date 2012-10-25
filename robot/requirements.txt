@@ -1,0 +1,4 @@
+# hangouts
+selenium
+# adminserver
+bottle==0.10.11
