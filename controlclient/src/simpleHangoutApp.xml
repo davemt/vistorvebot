@@ -104,8 +104,9 @@ function showParticipants() {
 function showHangoutUrl() {
   var url = gapi.hangout.getHangoutUrl();
 
-  var retVal = '<p><a href="'+url+'">Hangout URL</a></p>';
-  var retVal += '<p>Session ID:' + gadgets.views.getParams()['appData'] + '</p>';
+  console.log(gadgets.views.getParams());
+
+  var retVal = '<p><a href="' + url + '">Hangout URL</a></p>' + '<p>Session ID:' + gadgets.views.getParams()['appData'] + '</p>';
   var div = document.getElementById('hangoutUrlDiv');
 
   div.innerHTML = retVal;
