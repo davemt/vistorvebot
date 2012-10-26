@@ -11,7 +11,7 @@
                                        $('#robot-errors').text('ERROR: ' + data.message);
                                    }
                                    else {
-                                       window.open(hangoutURL + "?gd=" +
+                                       window.open(hangoutURL + '&gd=' +
                                                    encodeURI(data.activate_session_url));
                                    }
                      });

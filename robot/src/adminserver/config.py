@@ -1,4 +1,4 @@
-ADMINSERVER_HOST = 'localhost'
-ADMINSERVER_PORT = '8080'
+ADMINSERVER_HOST = '0.0.0.0'
+ADMINSERVER_PORT = '80'
 DEBUG = True
 SESSION_DIR = '/tmp/robot_session'
