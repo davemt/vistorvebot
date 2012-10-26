@@ -1,14 +1,20 @@
 {% extends 'base.html' %}
 
+{% block assets_extended %}
+<script src="{{ STATIC_URL }}js/robotlist.js"></script>
+{% endblock %}
+
 {% block copy %}
 <div style="height:250px;">
   <div class="table_wrapper" id="robot_list">
+    <div id="robot-errors" style="color:red"></div>
     <table>
       {% for robot in robots %}
       <tr>
         <td style="font-weight: bold">{{ robot.name }}</td>
         <td class="robot_status {{ robot.state }}">{{ robot.get_state_display }}</td>
-        <td><input data-robot-id="{{ robot.pk }}" type="button" value="Join Me?" {% if robot.state != "ready" %} disabled="true" {% endif %}></input></td>
+        <td class="robot_status {{ robot.state }}">{{ robot.get_state_display }}</td>
+        <td><input data-hangout-url="{{ hangout_url }}" data-robot-id="{{ robot.pk }}" type="button"  {% if robot.state != "ready" %} disabled="true" {% endif %} value="Join Me?"></input></td>
       </tr>
       {% endfor %}
       </table>

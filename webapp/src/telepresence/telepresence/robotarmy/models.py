@@ -1,3 +1,7 @@
+import simplejson
+import urllib2
+import httplib
+from telepresence import globalconfig
 from django.db import models
 
 class Robot(models.Model):
@@ -19,12 +23,29 @@ class Robot(models.Model):
     def __unicode__(self):
         return self.name
 
+    @property
+    def initialize_session_url(self):
+        return "http://" + self.ip + globalconfig.INITIALIZE_SESSION_METHOD
+
+    def get_activate_session_url(self, session_id):
+        url = "http://" + self.ip + globalconfig.ACTIVATE_SESSION_METHOD + "%s/"
+        return url % session_id
+
     def initialize_session(self):
         """Makes a request to the robot for a new session id and returns the
         hangout URL with the session_id and the robout URL passed as params"""
-        
-        # Returns a dict with Error: some error
-        # OR
-        # Returns a dict with a full activate_control_session url
-        # like http://127.0.0.1:8080/activate_control_session?session_id=123
-        # Returns error true/false
+        try:
+            sock = urllib2.urlopen(self.initialize_session_url)
+        except urllib2.HTTPError:
+            return {"error":True, "message": "The robot didn't like your request"}
+        except urllib2.URLError:
+            return {"error":True, "message": "The robot might be down"}
+        except httplib.HTTPException:
+            return {"error":True, "message": "Something strange is happening down robot way"}
+
+        try:
+            data = simplejson.loads(sock.read())
+        except simplejson.JSONDecodeError:
+            return {"error":True, "message": "The robot is speaking nonsense"}
+        sid = data['sid']
+        return {"error":False, "activate_session_url": self.get_activate_session_url(sid)}
