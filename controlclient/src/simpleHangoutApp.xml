@@ -106,11 +106,11 @@ function showHangoutUrl() {
   var hangoutUrl = gapi.hangout.getHangoutUrl(), 
   beginControlUrl = gadgets.views.getParams();
 
-  $.getJSON(beginControlUrl,
-            {hangout_url: hangoutUrl},
-            function(data) {
-              $('#hangoutSuccessDiv').text('hanging out: ' + data.message);
-            });
+  jQuery.getJSON(beginControlUrl,
+                 {hangout_url: hangoutUrl},
+                 function(data) {
+                   jQuery('#hangoutSuccessDiv').text('hanging out: ' + data.message);
+                 });
 }
 
 function init() {
