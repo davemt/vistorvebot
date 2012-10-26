@@ -35,3 +35,6 @@ server/static/*
 
 # Stupid Emacs
 *~
+
+# Stupid Vim
+*.swp
