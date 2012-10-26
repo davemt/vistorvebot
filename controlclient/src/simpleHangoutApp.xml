@@ -51,9 +51,15 @@
 <input class="button" type="button" value="Show participants!" id="showParticipants" 
     style="visibility:hidden;"
     onClick="showParticipants()"/>
-</p>
 
 <div id="participantsDiv"></div>
+
+<input class="button" type="button" value="Show Hangout URL!" id="showHangoutUrl" 
+    style="visibility:hidden;"
+    onClick="showHangoutUrl()"/>
+</p>
+
+<div id="hangoutUrlDiv"></div>
 
 <hr>
 
@@ -95,12 +101,23 @@ function showParticipants() {
   div.innerHTML = retVal;
 }
 
+function showHangoutUrl() {
+  var url = gapi.hangout.getHangoutUrl();
+
+  var retVal = '<p>Hangout URL: ' + url + '</p>';
+  var div = document.getElementById('hangoutUrlDiv');
+
+  div.innerHTML = retVal;
+}
+
 function init() {
   // When API is ready...                                                         
   gapi.hangout.onApiReady.add(
       function(eventObj) {
         if (eventObj.isApiReady) {
           document.getElementById('showParticipants')
+            .style.visibility = 'visible';
+          document.getElementById('showHangoutUrl')
             .style.visibility = 'visible';
         }
       });

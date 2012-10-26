@@ -40,3 +40,6 @@ server/static/*
 *~
 
 */globalconfig.py
+
+# Stupid Vim
+*.swp

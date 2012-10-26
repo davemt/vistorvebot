@@ -28,8 +28,9 @@ class HangoutSession(object):
         self._join_hangout(hangout_url)
 
     def _join_hangout(self, url):
-        if HANGOUT_BASE_URL not in url:
-            raise ValueError("Invalid google hangout URL.")
+        # TODO commented-out until we settle on a url format...
+        #if HANGOUT_BASE_URL not in url:
+        #    raise ValueError("Invalid google hangout URL.")
         self.driver.get(url)
         # TODO this is silly and slow as hell.
         try:
