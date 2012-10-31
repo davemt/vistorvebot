@@ -1,3 +1,4 @@
+import time
 from itertools import count
 
 from selenium import webdriver
@@ -33,18 +34,21 @@ class HangoutSession(object):
         #    raise ValueError("Invalid google hangout URL.")
         self.driver.get(url)
         # TODO this is silly and slow as hell.
-        try:
-            for i in count():
-                if i > 10:
-                    raise NoSuchElementException
+        time.sleep(30)
+        for i in count():
+            if i > 10:
+                raise NoSuchElementException("Could not locate the join-hangout button after 10 tries.")
+            try:
                 buttons = self.driver.find_elements_by_css_selector('div[role="button"]')
-                try:
-                    button = [b for b in buttons if JOIN_BUTTON_TEXT in b.text][0]
-                    break
-                except IndexError:
-                    pass
-        except NoSuchElementException:
-            raise NoSuchElementException("Could not locate the join-hangout button.")
+            except NoSuchElementException:
+                time.sleep(2)
+                continue
+            try:
+                button = [b for b in buttons if JOIN_BUTTON_TEXT in b.text][0]
+                break
+            except IndexError:
+                pass
+
         button.click()
 
     def _login(self, username, password):
