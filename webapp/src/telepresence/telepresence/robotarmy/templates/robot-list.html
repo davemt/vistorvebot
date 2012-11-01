@@ -11,8 +11,7 @@
     <table>
       {% for robot in robots %}
       <tr>
-        <td style="font-weight: bold">{{ robot.name }}</td>
-        <td class="robot_status {{ robot.state }}">{{ robot.get_state_display }}</td>
+        <td style="font-weight: bold">{{ robot }}</td>
         <td class="robot_status {{ robot.state }}">{{ robot.get_state_display }}</td>
         <td><input data-hangout-url="{{ hangout_url }}" data-robot-id="{{ robot.pk }}" type="button"  {% if robot.state != "ready" %} disabled="true" {% endif %} value="Join Me?"></input></td>
       </tr>

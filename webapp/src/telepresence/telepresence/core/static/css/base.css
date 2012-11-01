@@ -159,7 +159,7 @@ h3 {
     color: red;
 }
 .robot_status.active {
-    color: yellow;
+    color: orange;
 }
 .robot_status.sleeping {
     color: grey;

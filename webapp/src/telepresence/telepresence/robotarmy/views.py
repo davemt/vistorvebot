@@ -1,12 +1,18 @@
-import datetime
 import simplejson
 from telepresence import globalconfig
+from django.db import transaction
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
+from django.utils.crypto import get_random_string
 
 from telepresence.robotarmy.models import Robot
+
+class HttpResponseUnauthorized(HttpResponse):
+    status_code = 401
+
+## TODO: Tests!!!
 
 @login_required
 def robot_list(request):
@@ -25,12 +31,20 @@ def robot_initialize_session(request, robot_id):
     else:
         robot = get_object_or_404(Robot, pk=robot_id)
         data = robot.initialize_session()
+        # Append additional data -- move this somewhere else?
+        data["robot_join_timeout"] = globalconfig.ROBOT_JOIN_TIMEOUT
         return HttpResponse(simplejson.dumps(data), 'application/javascript')
 
 def robot_session_ended(request):
     """The robot would call this view to tell us that the session ended
     so that we change the state"""
     ip = request.GET.get('ip')
+    key = request.GET.get('key')
+    robot = get_object_or_404(Robot, ip=ip)
+
+    if key != robot.secret_key:
+        return HttpResponseUnauthorized()
+
     robot_updated = Robot.objects.filter(
         ip=ip, state=Robot.STATE_ACTIVE
         ).update(state=Robot.STATE_READY)
@@ -41,22 +55,34 @@ def robot_session_ended(request):
         response = {"error": False, "message": "Status changed successfully"}
         return HttpResponse(simplejson.dumps(response), 'application/javascript')
 
+@transaction.commit_on_success
 def robot_heartbeat(request):
     """This comes every globalconfig.HEARTBEAT_INTERVAL, and tells us that
-    everything is OK"""
+    everything is OK.
+
+    If it is called on an IP for the first time, it creates a robot at that
+    IP and creates a key that must be used each time a request originates
+    from that IP."""
     ip = request.GET.get('ip')
-    is_active = request.GET.get('active')
-    if is_active and int(is_active):
-        # This does not need to be safe because it should never actually change
-        # The state...do we need a query here?
-        # TODO: Can this really happen?
-        Robot.objects.filter(ip=ip).update(
-            state=Robot.STATE_ACTIVE, last_heartbeat=datetime.datetime.now()
-        )
+
+    robot, created = Robot.objects.get_or_create(ip=ip)
+    if created:
+        key = get_random_string(50)
+        robot.secret_key = key
+        ## TODO: Add name here?
+        robot.save()
+        Robot.objects.update_heartbeat_and_state(ip, Robot.STATE_READY)
     else:
-        # This does not need to be safe because it should never actually change
-        # The state...do we need a query here?
-        Robot.objects.filter(ip=ip).update(
-            state=Robot.STATE_READY, last_heartbeat=datetime.datetime.now()
-        )
-    return HttpResponse('')
+        is_active = request.GET.get('active')
+        key = request.GET.get('key')
+        if key != robot.secret_key:
+            return HttpResponseUnauthorized()
+        if is_active and int(is_active):
+            # This does not need to be safe because it should never actually change
+            # The state...do we need a query here?
+            # TODO: Can this really happen?
+            Robot.objects.update_heartbeat_and_state(ip, Robot.STATE_ACTIVE)
+        else:
+            Robot.objects.update_heartbeat_and_state(ip, Robot.STATE_READY)
+
+    return HttpResponse(key)

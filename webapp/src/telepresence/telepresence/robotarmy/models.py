@@ -5,6 +5,21 @@ from telepresence import globalconfig
 
 from django.db import models, connection
 
+class RobotManager(models.Manager):
+    def update_heartbeat_and_state(self, ip, state):
+        cursor = connection.cursor()
+        cursor.execute(
+            """
+            UPDATE robotarmy_robot
+            SET last_heartbeat = DATETIME('now'), state = %s
+            WHERE ip = %s;
+            """,  [state, ip]
+        )
+        cursor.execute("select last_heartbeat from robotarmy_robot limit 1")
+
+        print cursor.fetchall()
+        print ip, state
+
 class Robot(models.Model):
     STATE_READY, STATE_DEAD, STATE_ACTIVE, STATE_SLEEPING = (
         'ready', 'dead', 'active', 'sleeping'
@@ -19,11 +34,13 @@ class Robot(models.Model):
     state = models.CharField(max_length=10, default=STATE_READY, choices=STATE_CHOICES)
     last_state_change = models.DateTimeField(auto_now=True)
     last_heartbeat = models.DateTimeField(null=True, blank=True)
+    secret_key = models.CharField(max_length=50)
     ip = models.IPAddressField(unique=True)
-    name = models.CharField(max_length=25)
+
+    objects = RobotManager()
 
     def __unicode__(self):
-        return self.name
+        return self.ip
 
     def refresh_state(self):
         """Gets (and sets) the state based on the timestamp of the last heartbeat
@@ -31,13 +48,12 @@ class Robot(models.Model):
         cursor = connection.cursor()
         cursor.execute(
             """
-            SELECT DATETIME(DATETIME('now') - last_heartbeat)
+            SELECT STRFTIME('%%s', DATETIME('now')) - STRFTIME('%%s', last_heartbeat)
             FROM robotarmy_robot
             WHERE id = %s
             """, [self.pk]
         )
         time_since_hb = cursor.fetchone()[0]
-
         if not time_since_hb or time_since_hb > globalconfig.HEARTBEAT_INTERVAL:
             # Update the robot state with a 'lock'
             robot_updated = Robot.objects.filter(
@@ -84,4 +100,8 @@ class Robot(models.Model):
         if robot_updated == 0: # TODO: Do we need to delete the session here?
             return {"error":True, "message": "Somebody else got to me first"}
 
-        return {"error":False, "activate_session_url": self.get_activate_session_url(sid)}
+        return {
+            "error":False,
+            "activate_session_url": self.get_activate_session_url(sid),
+            "sid": sid,
+         }
