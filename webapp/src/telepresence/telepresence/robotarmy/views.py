@@ -33,7 +33,7 @@ def robot_session_ended(request):
     ip = request.GET.get('ip')
     robot_updated = Robot.objects.filter(
         ip=ip, state=Robot.STATE_ACTIVE
-        ).update(state=Robot.READY)
+        ).update(state=Robot.STATE_READY)
     if robot_updated == 0: # Not sure if this is the correct behavior
         response = {"error": True, "message": "Status changed before I could update"}
         return HttpResponseBadRequest(simplejson.dumps(response), 'application/javascript')
@@ -49,6 +49,7 @@ def robot_heartbeat(request):
     if is_active and int(is_active):
         # This does not need to be safe because it should never actually change
         # The state...do we need a query here?
+        # TODO: Can this really happen?
         Robot.objects.filter(ip=ip).update(
             state=Robot.STATE_ACTIVE, last_heartbeat=datetime.datetime.now()
         )
@@ -56,6 +57,6 @@ def robot_heartbeat(request):
         # This does not need to be safe because it should never actually change
         # The state...do we need a query here?
         Robot.objects.filter(ip=ip).update(
-            state=Robot.READY, last_heartbeat=datetime.datetime.now()
+            state=Robot.STATE_READY, last_heartbeat=datetime.datetime.now()
         )
     return HttpResponse('')

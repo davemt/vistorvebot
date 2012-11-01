@@ -5,7 +5,7 @@ urlpatterns = patterns('telepresence.robotarmy.views',
     # SEGMENT NODE ASSIGNMENTS
     url(r'^robot-list/$',
         'robot_list', name='robot-list'),
-    url(r'^heartbeat/$',
+    url(r'^robot-heartbeat/$',
         'robot_heartbeat', name='robot-heartbeat'),
     url(r'^robot-session-ended/$',
         'robot_session_ended', name='robot-session-ended'),

@@ -31,14 +31,14 @@ class Robot(models.Model):
         cursor = connection.cursor()
         cursor.execute(
             """
-            SELECT TIME_TO_SEC(TIMEDIFF(NOW(), last_heartbeat))
+            SELECT DATETIME(DATETIME('now') - last_heartbeat)
             FROM robotarmy_robot
             WHERE id = %s
             """, [self.pk]
         )
         time_since_hb = cursor.fetchone()[0]
 
-        if time_since_hb > globalconfig.HEARBEAT_INTERVAL:
+        if not time_since_hb or time_since_hb > globalconfig.HEARTBEAT_INTERVAL:
             # Update the robot state with a 'lock'
             robot_updated = Robot.objects.filter(
                 pk=self.pk, state=self.state
@@ -76,11 +76,12 @@ class Robot(models.Model):
             return {"error":True, "message": "The robot is speaking nonsense"}
         sid = data['sid']
 
+        self.refresh_status()
         # Update the robot state with a 'lock'
         robot_updated = Robot.objects.filter(
             pk=self.pk, state=Robot.STATE_READY
             ).update(state=Robot.STATE_ACTIVE)
-        if robot_updated == 0:
+        if robot_updated == 0: # TODO: Do we need to delete the session here?
             return {"error":True, "message": "Somebody else got to me first"}
 
         return {"error":False, "activate_session_url": self.get_activate_session_url(sid)}
