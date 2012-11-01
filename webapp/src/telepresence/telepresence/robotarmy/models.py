@@ -93,7 +93,7 @@ class Robot(models.Model):
         sid = data['sid']
 
         ## TODO: The status is not getting updated when we start up!
-        self.refresh_status()
+        self.refresh_state()
         # Update the robot state with a 'lock'
         robot_updated = Robot.objects.filter(
             pk=self.pk, state=Robot.STATE_READY
