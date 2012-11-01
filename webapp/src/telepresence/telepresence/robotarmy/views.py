@@ -38,7 +38,7 @@ def robot_initialize_session(request, robot_id):
 def robot_session_ended(request):
     """The robot would call this view to tell us that the session ended
     so that we change the state"""
-    ip = request.GET.get('ip')
+    ip = request.META['REMOTE_ADDR']
     key = request.GET.get('key')
     robot = get_object_or_404(Robot, ip=ip)
 
@@ -63,7 +63,7 @@ def robot_heartbeat(request):
     If it is called on an IP for the first time, it creates a robot at that
     IP and creates a key that must be used each time a request originates
     from that IP."""
-    ip = request.GET.get('ip')
+    ip = request.META['REMOTE_ADDR']
 
     robot, created = Robot.objects.get_or_create(ip=ip)
     if created:

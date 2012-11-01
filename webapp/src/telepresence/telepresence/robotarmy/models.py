@@ -92,6 +92,7 @@ class Robot(models.Model):
             return {"error":True, "message": "The robot is speaking nonsense"}
         sid = data['sid']
 
+        ## TODO: The status is not getting updated when we start up!
         self.refresh_status()
         # Update the robot state with a 'lock'
         robot_updated = Robot.objects.filter(
