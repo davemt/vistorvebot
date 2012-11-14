@@ -12,7 +12,6 @@ from telepresence.robotarmy.models import Robot
 class HttpResponseUnauthorized(HttpResponse):
     status_code = 401
 
-## TODO: Tests!!!
 
 @login_required
 def robot_list(request):
@@ -44,7 +43,6 @@ def robot_session_ended(request):
 
     if key != robot.secret_key:
         return HttpResponseUnauthorized()
-
     robot_updated = Robot.objects.filter(
         ip=ip, state=Robot.STATE_ACTIVE
         ).update(state=Robot.STATE_READY)
@@ -84,5 +82,4 @@ def robot_heartbeat(request):
             Robot.objects.update_heartbeat_and_state(ip, Robot.STATE_ACTIVE)
         else:
             Robot.objects.update_heartbeat_and_state(ip, Robot.STATE_READY)
-
     return HttpResponse(key)

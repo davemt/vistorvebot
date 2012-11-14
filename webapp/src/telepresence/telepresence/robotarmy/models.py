@@ -5,6 +5,8 @@ from telepresence import globalconfig
 
 from django.db import models, connection
 
+# TODO: Store key hashed + salted!
+
 class RobotManager(models.Manager):
     def update_heartbeat_and_state(self, ip, state):
         cursor = connection.cursor()
@@ -17,8 +19,6 @@ class RobotManager(models.Manager):
         )
         cursor.execute("select last_heartbeat from robotarmy_robot limit 1")
 
-        print cursor.fetchall()
-        print ip, state
 
 class Robot(models.Model):
     STATE_READY, STATE_DEAD, STATE_ACTIVE, STATE_SLEEPING = (
@@ -42,7 +42,7 @@ class Robot(models.Model):
     def __unicode__(self):
         return self.ip
 
-    def refresh_state(self):
+    def refresh_state(self, interval=globalconfig.HEARTBEAT_INTERVAL):
         """Gets (and sets) the state based on the timestamp of the last heartbeat
         and the HEARTBEAT_INTERVAL, and returns the resulting state."""
         cursor = connection.cursor()
@@ -54,7 +54,7 @@ class Robot(models.Model):
             """, [self.pk]
         )
         time_since_hb = cursor.fetchone()[0]
-        if not time_since_hb or time_since_hb > globalconfig.HEARTBEAT_INTERVAL:
+        if time_since_hb >= interval:
             # Update the robot state with a 'lock'
             robot_updated = Robot.objects.filter(
                 pk=self.pk, state=self.state
@@ -80,29 +80,29 @@ class Robot(models.Model):
         try:
             sock = urllib2.urlopen(self.initialize_session_url)
         except urllib2.HTTPError:
-            return {"error":True, "message": "The robot didn't like your request"}
+            return {"error": True, "message": "The robot didn't like your request"}
         except urllib2.URLError:
-            return {"error":True, "message": "The robot might be down"}
+            return {"error": True, "message": "The robot might be down"}
         except httplib.HTTPException:
-            return {"error":True, "message": "Something strange is happening down robot way"}
+            return {"error": True, "message": "Something strange is happening down robot way"}
 
         try:
             data = simplejson.loads(sock.read())
         except simplejson.JSONDecodeError:
-            return {"error":True, "message": "The robot is speaking nonsense"}
+            return {"error": True, "message": "The robot is speaking nonsense"}
         sid = data['sid']
 
         ## TODO: The status is not getting updated when we start up!
-        self.refresh_status()
+        self.refresh_state()
         # Update the robot state with a 'lock'
         robot_updated = Robot.objects.filter(
             pk=self.pk, state=Robot.STATE_READY
             ).update(state=Robot.STATE_ACTIVE)
         if robot_updated == 0: # TODO: Do we need to delete the session here?
-            return {"error":True, "message": "Somebody else got to me first"}
+            return {"error": True, "message": "Somebody else got to me first"}
 
         return {
-            "error":False,
+            "error": False,
             "activate_session_url": self.get_activate_session_url(sid),
             "sid": sid,
          }
