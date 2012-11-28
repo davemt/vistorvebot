@@ -6,8 +6,6 @@ from telepresence import globalconfig
 from django.db import models, connection
 from django.contrib.auth.hashers import check_password, make_password
 
-# TODO: Store key hashed + salted!
-
 class RobotManager(models.Manager):
     def update_heartbeat_and_state(self, ip, state):
         cursor = connection.cursor()
