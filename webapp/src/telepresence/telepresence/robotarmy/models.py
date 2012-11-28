@@ -4,6 +4,7 @@ import httplib
 from telepresence import globalconfig
 
 from django.db import models, connection
+from django.contrib.auth.hashers import check_password, make_password
 
 # TODO: Store key hashed + salted!
 
@@ -34,13 +35,26 @@ class Robot(models.Model):
     state = models.CharField(max_length=10, default=STATE_READY, choices=STATE_CHOICES)
     last_state_change = models.DateTimeField(auto_now=True)
     last_heartbeat = models.DateTimeField(null=True, blank=True)
-    secret_key = models.CharField(max_length=50)
+    secret_key = models.CharField(max_length=128)
     ip = models.IPAddressField(unique=True)
 
     objects = RobotManager()
 
     def __unicode__(self):
         return self.ip
+
+    def set_secret_key(self, raw_key):
+        self.secret_key = make_password(raw_key)
+
+    def check_secret_key(self, raw_key):
+        """
+        Returns a boolean of whether the raw_password was correct. Handles
+        hashing formats behind the scenes.
+        """
+        def setter(raw_key):
+            self.set_secret_key(raw_key)
+            self.save()
+        return check_password(raw_key, self.secret_key, setter)
 
     def refresh_state(self, interval=globalconfig.HEARTBEAT_INTERVAL):
         """Gets (and sets) the state based on the timestamp of the last heartbeat

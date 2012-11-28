@@ -41,7 +41,7 @@ def robot_session_ended(request):
     key = request.GET.get('key')
     robot = get_object_or_404(Robot, ip=ip)
 
-    if key != robot.secret_key:
+    if not robot.check_secret_key(key):
         return HttpResponseUnauthorized()
     robot_updated = Robot.objects.filter(
         ip=ip, state=Robot.STATE_ACTIVE
@@ -66,14 +66,15 @@ def robot_heartbeat(request):
     robot, created = Robot.objects.get_or_create(ip=ip)
     if created:
         key = get_random_string(50)
-        robot.secret_key = key
+        robot.set_secret_key(key)
         ## TODO: Add name here?
         robot.save()
         Robot.objects.update_heartbeat_and_state(ip, Robot.STATE_READY)
+        return HttpResponse(key)
     else:
         is_active = request.GET.get('active')
         key = request.GET.get('key')
-        if key != robot.secret_key:
+        if not robot.check_secret_key(key):
             return HttpResponseUnauthorized()
         if is_active and int(is_active):
             # This does not need to be safe because it should never actually change
@@ -82,4 +83,4 @@ def robot_heartbeat(request):
             Robot.objects.update_heartbeat_and_state(ip, Robot.STATE_ACTIVE)
         else:
             Robot.objects.update_heartbeat_and_state(ip, Robot.STATE_READY)
-    return HttpResponse(key)
+        return HttpResponse('')

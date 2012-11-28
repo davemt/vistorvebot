@@ -19,8 +19,7 @@ class RobotHeartBeatTestCase(unittest.TestCase):
         response = self.client.get('/robotarmy/robot-heartbeat/')
         key = response.content
         created_robot = Robot.objects.all().get()
-        self.assertEqual(created_robot.secret_key, key)
-
+        self.assertTrue(created_robot.check_secret_key(key))
 
     def test_heartbeat_on_existing_robot_without_key(self):
         delete_all_robots()
