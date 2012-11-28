@@ -1,8 +1,12 @@
+import os
 import time
+import urllib2
 from itertools import count
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+
+import config
 
 WAIT_FOR_ELEMENT_SECS = 60
 
@@ -15,20 +19,50 @@ LOGIN_FIELDS = {
 }
 JOIN_BUTTON_TEXT = 'Join'
 
-# TODO move to config.py
+# TODO move to config.py, and then to somewhere better
 USERNAME = 'telepresent001'
 PASSWORD = 'selenium'
 
+HANGOUT_CONTROL_PORTFILE = os.path.join(config.SESSION_DIR, 'selenium-hangout.port')
+
+def start_hangout(url):
+    """Start google hangout in a selenium chromebrowser instance."""
+    session = HangoutSession()
+    f = open(HANGOUT_CONTROL_PORTFILE, 'w')
+    f.write(str(session.driver.service.port) + '\n')
+    f.close()
+    session.join_hangout(url)
+
+
+def get_hangout_control_port():
+    # get selenium control service port
+    try:
+        port_file = open(HANGOUT_CONTROL_PORTFILE)
+        port = port_file.readlines()[0].strip()
+    except IOError:
+        # TODO handle
+        raise
+    return port
+
+
+def stop_hangout(control_port):
+    """Stop the active google hangout session."""
+    try:
+        # shutdown chromedriver
+        urllib2.urlopen("http://127.0.0.1:%s/shutdown" % control_port)
+    except urllib2.URLError:
+        # TODO handle
+        raise
+
+
 class HangoutSession(object):
-    def __init__(self, hangout_url, username=USERNAME, password=PASSWORD):
-        self.hangout_url = hangout_url
+    def __init__(self, username=USERNAME, password=PASSWORD):
         self.driver = webdriver.Chrome()
         self.driver.implicitly_wait(WAIT_FOR_ELEMENT_SECS)
         if not self._is_logged_in:
             self._login(username, password)
-        self._join_hangout(hangout_url)
 
-    def _join_hangout(self, url):
+    def join_hangout(self, url):
         # TODO commented-out until we settle on a url format...
         #if HANGOUT_BASE_URL not in url:
         #    raise ValueError("Invalid google hangout URL.")
