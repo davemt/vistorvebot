@@ -24,7 +24,7 @@ def init_session():
     # generate and store session id
     session_file = open(SESSION_ID_FILE, 'w')
     sid = generate_session_id()
-    session_file.write(sid)
+    session_file.write(sid + '\n')
     session_file.close()
     return sid
 
@@ -34,7 +34,7 @@ def verify_session(sid):
         return False
     session_file = open(SESSION_ID_FILE)
     try:
-        stored_sid = session_file.readlines()[0]
+        stored_sid = session_file.readlines()[0].strip()
         assert sid == stored_sid
         return True
     except (IndexError, AssertionError):
