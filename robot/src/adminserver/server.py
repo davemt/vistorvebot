@@ -4,35 +4,35 @@ from bottle import route, run, request, abort
 
 import config
 from multiprocessing import Process
-from session import init_session, verify_session, close_session, SessionConflict
-from hangouts import start_hangout, stop_hangout, get_hangout_control_port
+from session import Session, SessionConflict
+from hangouts import start_hangout, stop_hangout
 
 @route('/new_session/')
 def new_session():
     """Acquire a new robot control session.  If successful, other parties are
     blocked from acquiring a session."""
     try:
-        sid = init_session() 
+        session = Session.initialize() 
     except SessionConflict, e:
         # TODO how do we skip the html generation that abort does?
-        abort(409, "Unable to acquire control session id: %s" % str(e))
-    return {'sid': sid}
+        abort(409, str(e))
+    return {'sid': session.sid}
 
 
 @route('/begin_control/:sid/')
 def begin_control(sid):
     """Begin the robot control session. Requires the GET parameter
     'hangout_url' to join the control hangout."""
-    if not verify_session(sid):
-        # TODO response code/text
-        abort()
+    try:
+        Session(sid)
+    except SessionConflict, e:
+        abort(409, str(e))
 
     url = request.params.get('hangout_url')
     if not url:
-        # TODO response code/text
-        abort()
+        abort(400, "Get parameter 'hangout_url' is required.")
 
-    p = Process(target=start_hangout, name="selenium-hangout", args=[url])
+    p = Process(target=start_hangout, name="selenium-hangout", args=[url, sid])
     p.start()
 
     return {'message': "Control is starting; joining the hangout."}
@@ -44,11 +44,12 @@ def end_session(sid):
     can then acquire a new session."""
     try:
         # TODO can we move this port stuff to hangouts.py?
-        #  The issue was that close_session deletes the session directory,
+        #  The issue was that Session.close deletes the session directory,
         #  which clears out the port storage file.  But we don't want to
         #  stop the hangout before we validate sid & close session.
-        port = get_hangout_control_port()
-        close_session(sid)
+        session = Session(sid)
+        port = session.get('hangout_control_port')
+        session.close()
         stop_hangout(port)
         return {'message': "Session ended successfully."}
     except SessionConflict, e:

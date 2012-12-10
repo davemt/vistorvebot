@@ -4,54 +4,98 @@ import shutil
 
 import config
 
-SESSION_ID_FILE = os.path.join(config.SESSION_DIR, 'sid')
-
-class SessionConflict(Exception):
-    pass
-
 def generate_session_id():
     import sha, time
     return sha.new(str(time.time())).hexdigest()
 
-def init_session():
-    # attempt to create session directory (acts as lock!)
-    try:
-        os.mkdir(config.SESSION_DIR)
-    except OSError as e:
-        if e.errno == errno.EISDIR or e.errno == errno.EEXIST:
-            raise SessionConflict("A session is already in progress.")
-        raise
-    # generate and store session id
-    session_file = open(SESSION_ID_FILE, 'w')
-    sid = generate_session_id()
-    session_file.write(sid + '\n')
-    session_file.close()
-    return sid
 
-def verify_session(sid):
-    if not os.path.isdir(config.SESSION_DIR):
-        # no session exists
-        return False
-    session_file = open(SESSION_ID_FILE)
-    try:
-        stored_sid = session_file.readlines()[0].strip()
-        assert sid == stored_sid
-        return True
-    except (IndexError, AssertionError):
-        return False
+class SessionKeyError(Exception):
+    """Raised when an expected key is not found in the session storage."""
 
-def close_session(sid):
-    # The following race condition is possible:
-    #  1) We attempt to close session
-    #  2) Session id matches and we're granted permission to close
-    #  3) Another verified party attempts to close session
-    #  4) Session id matches and they're granted permission to close
-    #  5) Their delete of session directory happens first
-    #  6) Another session is opened, which we are not allowed to close
-    #  7) We still have permission, so we then delete the wrong session
-    #     directory!
-    if not verify_session(sid):
-        raise SessionConflict("Session id did not match current session.")
-    # close the session with an atomic rename, then clean up
-    os.rename(config.SESSION_DIR, config.SESSION_DIR + sid)
-    shutil.rmtree(config.SESSION_DIR + sid)
+
+class SessionDoesNotExist(Exception):
+    """Raised when a given session can not be found."""
+
+
+class SessionConflict(Exception):
+    pass
+
+
+class Session(object):
+    def __init__(self, directory, sid):
+        # access existing session
+        if not os.path.isdir(directory):
+            raise SessionDoesNotExist("Session directory '%s' does not exist." % directory)
+        self.directory = directory
+        self.sid = sid
+        if not self._verify_sid(sid):
+            raise SessionConflict("Session id did not match current session.")
+
+    def _verify_sid(self, sid):
+        self.get('sid')
+        try:
+            stored_sid = self.get('sid')
+            assert sid == stored_sid
+            return True
+        except (SessionKeyError, AssertionError):
+            return False
+
+    @classmethod
+    def initialize(cls, directory=config.SESSION_DIR):
+        """Initialize a new session."""
+        # attempt to create session directory (acts as lock!)
+        try:
+            os.mkdir(directory)
+        except OSError as e:
+            if e.errno == errno.EISDIR or e.errno == errno.EEXIST:
+                raise SessionConflict("A session is already in progress.")
+        # generate and store session id
+        sid = generate_session_id()
+        try:
+            f = open(os.path.join(directory, 'sid'), 'w')
+            f.write(sid + '\n')
+            f.close()
+        except IOError:
+            raise IOError("Failed to store session id.")
+        return cls(sid)
+
+    def set(self, key, value):
+        """Set the value of a key in the session storage."""
+        try:
+            f = open(os.path.join(self.directory, key), 'w')
+            f.write(value + '\n')
+            f.close()
+        except IOError:
+            raise IOError("Failed to set value for key '%s' in filestore." % key)
+
+    def get(self, key):
+        """Get the value of a key in the session storage."""
+        try:
+            f = open(os.path.join(self.directory, key), 'r')
+        except IOError:
+            raise SessionKeyError("Key '%s' not found in session store." % str(key))
+        try:
+            value = f.readlines()[0].strip()
+        except IOError:
+            raise IOError("Failed to get value for session store key '%s'." % key)
+        except IndexError:
+            # empty file
+            return None
+        return value
+
+    def close(self):
+        # The following race condition is possible:
+        #  1) We attempt to close session
+        #  2) Session id matches and we're granted permission to close
+        #  3) Another verified party attempts to close session
+        #  4) Session id matches and they're granted permission to close
+        #  5) Their delete of session directory happens first
+        #  6) Another session is opened, which we are not allowed to close
+        #  7) We still have permission, so we then delete the wrong session
+        #     directory!
+
+        # close the session with an atomic rename, then clean up
+        os.rename(self.directory, self.directory + self.sid)
+        shutil.rmtree(self.directory + self.sid)
+
+
