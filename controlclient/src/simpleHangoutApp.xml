@@ -103,6 +103,7 @@ function showParticipants() {
 }
 
 function showHangoutUrl() {
+  document.getElementById('participantsDiv').innerHTML("starting showHangoutUrl");
   var hangoutUrl = gapi.hangout.getHangoutUrl(), 
   beginControlUrl = gadgets.views.getParams()['appData'];
 
@@ -117,6 +118,7 @@ function showHangoutUrl() {
 
 function init() {
   // When API is ready...                                                         
+  document.getElementById('participantsDiv').innerHTML("calling onApiReady.add");
   gapi.hangout.onApiReady.add(
       function(eventObj) {
         if (eventObj.isApiReady) {
