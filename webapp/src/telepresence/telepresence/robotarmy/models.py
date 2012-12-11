@@ -83,8 +83,12 @@ class Robot(models.Model):
         return "http://" + self.ip + globalconfig.INITIALIZE_SESSION_METHOD
 
     def get_activate_session_url(self, session_id):
-        url = "http://" + self.ip + globalconfig.ACTIVATE_SESSION_METHOD + "%s"
+        url = "http://" + self.ip + globalconfig.ACTIVATE_SESSION_METHOD + "%s/"
         return url % session_id
+
+    def get_websocket_control_url(self, session_id):
+        url = "ws://" + self.ip + "/control"
+        return url
 
     def initialize_session(self):
         """Makes a request to the robot for a new session id and returns the
@@ -116,5 +120,6 @@ class Robot(models.Model):
         return {
             "error": False,
             "activate_session_url": self.get_activate_session_url(sid),
+            "websocket_control_url": self.get_websocket_control_url(sid),
             "sid": sid,
          }

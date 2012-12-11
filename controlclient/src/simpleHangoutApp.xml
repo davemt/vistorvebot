@@ -50,13 +50,11 @@
 </table>
 
 <input class="button" type="button" value="Show participants!" id="showParticipants" 
-    style="visibility:hidden;"
     onClick="showParticipants()"/>
 
 <div id="participantsDiv"></div>
 
 <input class="button" type="button" value="Show Hangout URL!" id="showHangoutUrl" 
-    style="visibility:hidden;"
     onClick="showHangoutUrl()"/>
 </p>
 
@@ -67,7 +65,6 @@
 <p><a href="http://developers.google.com/+/hangouts/getting-started">Read the docs</a> to learn more about developing hangouts!</a></p>
 
 <script>
-var socket = new WebSocket("ws://172.29.208.44:9435/control");
 
 function vistorveForward() {
   socket.send("VISTORVE.FORWARD");
@@ -103,13 +100,15 @@ function showParticipants() {
 }
 
 function showHangoutUrl() {
-  var hangoutUrl = gapi.hangout.getHangoutUrl(), 
-  beginControlUrl = gadgets.views.getParams()['appData'];
+  var hangoutUrl = gapi.hangout.getHangoutUrl(),
+      appData = jQuery.parseJSON(gadgets.views.getParams()['appData']);
 
-  jQuery.getJSON(beginControlUrl,
+  
+  socket = new WebSocket(appData.websocket_control_url);
+  jQuery.getJSON(appData.activate_session_url,
                  {hangout_url: hangoutUrl},
                  function(data) {
-                   jQuery('#hangoutSuccessDiv').text('hanging out: ' + data.message);
+                   jQuery('#hangoutSuccessDiv').text('hanging out: ');
                  });
 }
 
