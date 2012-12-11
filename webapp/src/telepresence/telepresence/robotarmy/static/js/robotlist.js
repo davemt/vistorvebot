@@ -12,7 +12,7 @@
                                    }
                                    else {
                                        window.open(hangoutURL + '&gd=' +
-                                                   encodeURI(data));
+                                                   encodeURIComponent(JSON.stringify(data)));
                                    }
                      });
                  });

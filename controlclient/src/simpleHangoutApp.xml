@@ -80,9 +80,6 @@ function vistorveRight() {
 }
 
 function showParticipants() {
-  document.getElementById('participantsDiv').innerHTML = "starting showHangoutUrl";
-  var beginControlUrl = gadgets.views.getParams()['appData'];
-  document.getElementById('participantsDiv').innerHTML = beginControlUrl;
   var participants = gapi.hangout.getParticipants();
 
   var retVal = '<p>Participants: </p><ul>';
@@ -104,12 +101,10 @@ function showParticipants() {
 }
 
 function showHangoutUrl() {
-  document.getElementById('participantsDiv').innerHTML = "starting showHangoutUrl";
-  var hangoutUrl = gapi.hangout.getHangoutUrl(), beginControlUrl = gadgets.views.getParams()['appData'];
+  var hangoutUrl = gapi.hangout.getHangoutUrl(),
+      activateSessionUrl = gadgets.views.getParams()['appData'];
 
-  document.getElementById('participantsDiv').innerHTML = beginControlUrl;
-  console.log(beginControlUrl);
-  jQuery.getJSON(beginControlUrl,
+  jQuery.getJSON(activateSessionUrl,
                  {hangout_url: hangoutUrl},
                  function(data) {
                    jQuery('#hangoutSuccessDiv').text('hanging out: ' + data.message);
@@ -118,7 +113,6 @@ function showHangoutUrl() {
 
 function init() {
   // When API is ready...                                                         
-  document.getElementById('participantsDiv').innerHTML = "calling onApiReady.add";
   gapi.hangout.onApiReady.add(
       function(eventObj) {
         if (eventObj.isApiReady) {
