@@ -29,7 +29,7 @@ def robot_initialize_session(request, robot_id):
         raise Http404
     else:
         robot = get_object_or_404(Robot, pk=robot_id)
-        data = robot.initialize_session()
+        data = robot.initialize_session(request)
         # Append additional data -- move this somewhere else?
         data["robot_join_timeout"] = globalconfig.ROBOT_JOIN_TIMEOUT
         return HttpResponse(simplejson.dumps(data), 'application/javascript')

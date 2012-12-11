@@ -90,11 +90,11 @@ class Robot(models.Model):
         url = "ws://" + self.ip + "/control"
         return url
 
-    def get_hangout_javascript_url(self, session_id):
-        url = "http://" + self.ip + globalconfig.HANGOUT_JAVASCRIPT_URL
+    def get_hangout_javascript_url(self, request, session_id):
+        url = "http://" + request.get_host() + globalconfig.HANGOUT_JAVASCRIPT_URL
         return url
 
-    def initialize_session(self):
+    def initialize_session(self, request):
         """Makes a request to the robot for a new session id and returns the
         hangout URL with the session_id and the robout URL passed as params"""
         try:
@@ -125,7 +125,7 @@ class Robot(models.Model):
             "error": False,
             "activate_session_url": self.get_activate_session_url(sid),
             "websocket_control_url": self.get_websocket_control_url(sid),
-            "hangout_javascript_url": self.get_hangout_javascript_url(sid),
+            "hangout_javascript_url": self.get_hangout_javascript_url(request, sid),
             "hangout_function": "hangout",
             "sid": sid,
          }
