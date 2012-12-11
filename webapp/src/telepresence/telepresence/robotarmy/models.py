@@ -83,7 +83,7 @@ class Robot(models.Model):
         return "http://" + self.ip + globalconfig.INITIALIZE_SESSION_METHOD
 
     def get_activate_session_url(self, session_id):
-        url = "http://" + self.ip + globalconfig.ACTIVATE_SESSION_METHOD + "%s"
+        url = "http://" + self.ip + globalconfig.ACTIVATE_SESSION_METHOD + "%s/"
         return url % session_id
 
     def get_websocket_control_url(self, session_id):
