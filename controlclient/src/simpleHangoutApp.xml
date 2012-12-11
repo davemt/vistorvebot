@@ -50,13 +50,11 @@
 </table>
 
 <input class="button" type="button" value="Show participants!" id="showParticipants" 
-    style="visibility:hidden;"
     onClick="showParticipants()"/>
 
 <div id="participantsDiv"></div>
 
 <input class="button" type="button" value="Show Hangout URL!" id="showHangoutUrl" 
-    style="visibility:hidden;"
     onClick="showHangoutUrl()"/>
 </p>
 
