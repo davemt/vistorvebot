@@ -102,8 +102,7 @@ function showParticipants() {
 
 function showHangoutUrl() {
   document.getElementById('participantsDiv').innerHTML("starting showHangoutUrl");
-  var hangoutUrl = gapi.hangout.getHangoutUrl(), 
-  beginControlUrl = gadgets.views.getParams()['appData'];
+  var hangoutUrl = gapi.hangout.getHangoutUrl(), beginControlUrl = gadgets.views.getParams()['appData'];
 
   document.getElementById('participantsDiv').innerHTML(beginControlUrl);
 
