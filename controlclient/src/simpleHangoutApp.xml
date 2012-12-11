@@ -101,12 +101,14 @@ function showParticipants() {
 
 function showHangoutUrl() {
   var hangoutUrl = gapi.hangout.getHangoutUrl(),
-      activateSessionUrl = gadgets.views.getParams()['appData'];
+      appData = jQuery.parseJSON(gadgets.views.getParams()['appData']);
 
-  jQuery.getJSON(activateSessionUrl,
+  
+  socket = new WebSocket(appData.websocket_control_url);
+  jQuery.getJSON(appData.activate_session_url,
                  {hangout_url: hangoutUrl},
                  function(data) {
-                   socket = new WebSocket(data.websocket_control_url);
+                   jQuery('#hangoutSuccessDiv').text('hanging out: ');
                  });
 }
 

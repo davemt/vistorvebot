@@ -120,6 +120,6 @@ class Robot(models.Model):
         return {
             "error": False,
             "activate_session_url": self.get_activate_session_url(sid),
-            "websocket_control_url": self.get_websocket_control_url(session_id),
+            "websocket_control_url": self.get_websocket_control_url(sid),
             "sid": sid,
          }
