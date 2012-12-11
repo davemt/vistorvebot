@@ -6,6 +6,7 @@ import config
 from multiprocessing import Process
 from session import Session, SessionConflict
 from hangouts import start_hangout, stop_hangout
+from heartbeats import send_session_ended
 
 @route('/new_session/')
 def new_session():
@@ -51,6 +52,7 @@ def end_session(sid):
         port = session.get('hangout_control_port')
         session.close()
         stop_hangout(port)
+        send_session_ended()
         return {'message': "Session ended successfully."}
     except SessionConflict, e:
         abort(409, "Unable to end control session: %s" % str(e))
