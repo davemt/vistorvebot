@@ -65,7 +65,7 @@
 <p><a href="http://developers.google.com/+/hangouts/getting-started">Read the docs</a> to learn more about developing hangouts!</a></p>
 
 <script>
-var socket = new WebSocket("ws://172.29.208.44:9435/control");
+//var socket = new WebSocket("ws://172.29.208.44:9435/control");
 
 function vistorveForward() {
   socket.send("VISTORVE.FORWARD");
