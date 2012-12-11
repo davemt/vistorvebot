@@ -22,7 +22,7 @@ class SessionConflict(Exception):
 
 
 class Session(object):
-    def __init__(self, directory, sid):
+    def __init__(self, sid, directory=config.SESSION_DIR):
         # access existing session
         if not os.path.isdir(directory):
             raise SessionDoesNotExist("Session directory '%s' does not exist." % directory)
@@ -57,13 +57,20 @@ class Session(object):
             f.close()
         except IOError:
             raise IOError("Failed to store session id.")
-        return cls(sid)
+        return cls(sid, directory=directory)
+
+    @staticmethod
+    def check_session_exists(directory=config.SESSION_DIR):
+        if os.path.exists(directory):
+            return True
+        else:
+            return False
 
     def set(self, key, value):
         """Set the value of a key in the session storage."""
         try:
             f = open(os.path.join(self.directory, key), 'w')
-            f.write(value + '\n')
+            f.write(str(value) + '\n')
             f.close()
         except IOError:
             raise IOError("Failed to set value for key '%s' in filestore." % key)

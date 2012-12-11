@@ -7,7 +7,7 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 
 import config
-from .session import Session as RobotSession
+from session import Session as RobotSession
 
 WAIT_FOR_ELEMENT_SECS = 60
 
@@ -27,9 +27,9 @@ PASSWORD = 'selenium'
 def start_hangout(url, robot_sid):
     """Start google hangout in a selenium chromebrowser instance."""
     hangout = HangoutSession()
-    hangout.join_hangout(url)
     robot_session = RobotSession(robot_sid)
     robot_session.set('hangout_control_port', hangout.driver.service.port)
+    hangout.join_hangout(url)
 
 
 def stop_hangout(control_port):
