@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import pyrobot
+
 """When a WebSocket request comes in, the resource name
 specified in the handshake is considered as if it is a file path under
 <websock_handlers> and the handler defined in
@@ -8,6 +10,10 @@ specified in the handshake is considered as if it is a file path under
 For example, if the resource name is /example/chat, the handler defined in
 <websock_handlers>/example/chat_wsh.py is invoked.
 """
+
+## TODO: This should all use wss instead of ws, or else our security is dead
+
+ROBOT = pyrobot.RobotControl()
 
 def web_socket_do_extra_handshake(request):
     """web_socket_do_extra_handshake is called during the handshake after the
@@ -33,6 +39,11 @@ def web_socket_do_extra_handshake(request):
     None, you must choose one subprotocol from this list and set it to
     ws_protocol.
     """
+
+    ## TODO: Get the key from ws_origin (/control?key=123) and check it against
+    #        the key that is registered on the bot. Raise an exception if it
+    #        does not match
+
     print "incoming handshake"
 
 
@@ -68,13 +79,7 @@ def web_socket_transfer_data(request):
     """
     while True:
         line = request.ws_stream.receive_message()
-        if line is None:
-            return
-        if isinstance(line, unicode):
-            request.ws_stream.send_message(line, binary=False)
-            print "echo: " + line
-        else:
-            request.ws_stream.send_message(line, binary=True)
+        pyrobot.run_robot_command(ROBOT, line)
 
 def web_socket_passive_closing_handshake(request):
     """web_socket_passive_closing_handshake is called after the server receives
@@ -88,6 +93,5 @@ def web_socket_passive_closing_handshake(request):
     A WebSocket handler must be thread-safe if the server (Apache or
     standalone.py) is configured to use threads.
     """
-
+    ROBOT.stop()
     print "closing handshake"
-
