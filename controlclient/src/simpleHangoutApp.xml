@@ -80,6 +80,9 @@ function vistorveRight() {
 }
 
 function showParticipants() {
+  document.getElementById('participantsDiv').innerHTML("starting showHangoutUrl");
+  var beginControlUrl = gadgets.views.getParams()['appData'];
+  document.getElementById('participantsDiv').innerHTML(beginControlUrl);
   var participants = gapi.hangout.getParticipants();
 
   var retVal = '<p>Participants: </p><ul>';
