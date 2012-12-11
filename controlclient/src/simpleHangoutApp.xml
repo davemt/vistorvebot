@@ -108,7 +108,7 @@ function showHangoutUrl() {
   var hangoutUrl = gapi.hangout.getHangoutUrl(), beginControlUrl = gadgets.views.getParams()['appData'];
 
   document.getElementById('participantsDiv').innerHTML = beginControlUrl;
-
+  console.log(beginControlUrl);
   jQuery.getJSON(beginControlUrl,
                  {hangout_url: hangoutUrl},
                  function(data) {
