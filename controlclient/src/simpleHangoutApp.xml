@@ -58,7 +58,8 @@ function loadVBot() {
     VBot.appData = jQuery.parseJSON(gadgets.views.getParams()['appData']); console.log("2");
 
     console.log("About to call jQuery.getScript(\"" + VBot.appData.hangout_javascript_url + "\")" );
-    jQuery.getScript(VBot.appData.hangout_javascript_url); console.log("3");
+    jQuery("#loadVBot").after("<script type='javascript' src='"+VBot.appData.hangout_javascript_url+"'></scr"+"ipt>");
+    // jQuery.getScript(VBot.appData.hangout_javascript_url); console.log("3");
     // jQuery.getScript(appData.hangout_javascript_url,
     //                  function(script, textStatus, jqXHR) {
     //                      eval(appData.hangout_function+"(appData)");
