@@ -1,1 +1,1 @@
-/home/swillis/projects/vistorvebot/globalconfig.py
+../../../globalconfig.py
