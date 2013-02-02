@@ -41,7 +41,7 @@
 <script src="https://hangoutsapi.talkgadget.google.com/hangouts/api/hangout.js?v=1.0" ></script>
 <script src="https:///ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
 
-<h3>Simple Hangout App</h3>
+<h3>Vistorve Bot!</h3>
 
 <p>
 <table>
@@ -49,39 +49,27 @@
 <tr><td><input class="button" type="button" value="left" id="vistorveLeft" onClick="vistorveLeft()"></td><td/><td><input class="button" type="button" value="right" id="vistorveRight" onClick="vistorveRight()"><td/>
 </table>
 
-<input class="button" type="button" value="Show participants!" id="showParticipants" 
-    onClick="showParticipants()"/>
-
-<div id="participantsDiv"></div>
-
-<input class="button" type="button" value="Show Hangout URL!" id="showHangoutUrl" 
-    onClick="showHangoutUrl()"/>
-</p>
-
-<div id="hangoutSuccessDiv"></div>
-
-<hr>
-
-<p><a href="http://developers.google.com/+/hangouts/getting-started">Read the docs</a> to learn more about developing hangouts!</a></p>
+<input class="button" type="button" value="loadVBot()!" id="loadVBot" onClick="loadVBot()"/>
 
 <script>
+
+function loadVBot() {
+    VBot = {}; console.log("1");
+    VBot.appData = jQuery.parseJSON(gadgets.views.getParams()['appData']); console.log("2");
+
+    console.log("About to call jQuery.getScript(\"" + VBot.appData.hangout_javascript_url + "\")" );
+    jQuery.getScript(VBot.appData.hangout_javascript_url); console.log("3");
+    // jQuery.getScript(appData.hangout_javascript_url,
+    //                  function(script, textStatus, jqXHR) {
+    //                      eval(appData.hangout_function+"(appData)");
+    //                  });
+}
 
 function init() {
     // When API is ready...
     gapi.hangout.onApiReady.add(
         function(eventObj) {
-            if (eventObj.isApiReady) {
-                VBot = {}; console.log("1");
-                VBot.hangout = VBot.hangout || {}; console.log("2");
-                VBot.hangout.appData = jQuery.parseJSON(gadgets.views.getParams()['appData']); console.log("3");
-
-                console.log("About to call jQuery.getScript(\"" + appData.hangout_javascript_url + "\")" );
-                jQuery.getScript(appData.hangout_javascript_url); console.log("4");
-                // jQuery.getScript(appData.hangout_javascript_url,
-                //                  function(script, textStatus, jqXHR) {
-                //                      eval(appData.hangout_function+"(appData)");
-                //                  });
-            }
+            if (eventObj.isApiReady) { loadVBot() }
         });
 }
 

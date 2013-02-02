@@ -3,45 +3,30 @@ function hangout(appData) {
 
     // Maybe the returned json from activate_session_url should contain the
     // websocket url
+
+    console.log(hangoutUrl);
     jQuery.getJSON(appData.activate_session_url,
                    {hangout_url: hangoutUrl},
                    function(data) {
+                       console.log(appData.websocket_control_url);
                        socket = new WebSocket(appData.websocket_control_url);
+                       console.log("Opened socket");
                        jQuery('#hangoutSuccessDiv').text('hanging out: ');
                    });
 }
 
 function vistorveForward() {
-  socket.send("VISTORVE.FORWARD");
+  socket.send("forward");
 }
 
 function vistorveLeft() {
-  socket.send("VISTORVE.LEFT");
+  socket.send("left");
 }
 
 function vistorveRight() {
-  socket.send("VISTORVE.RIGHT");
+  socket.send("right");
 }
 
-function showParticipants() {
-  var participants = gapi.hangout.getParticipants();
-
-  var retVal = '<p>Participants: </p><ul>';
-
-  for (var index in participants) {
-    var participant = participants[index];
-
-    if (!participant.person) {
-      retVal += '<li>A participant not running this app</li>';
-    }
-    retVal += '<li>' + participant.person.displayName + '</li>';
-  }
-
-  retVal += '</ul>';
-
-  var div = document.getElementById('participantsDiv');
-
-  div.innerHTML = retVal;
-}
-
+console.log("in hangout.js");
+console.log(VBot.hangout.appData);
 hangout(VBot.hangout.appData);
