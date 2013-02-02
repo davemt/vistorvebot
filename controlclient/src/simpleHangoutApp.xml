@@ -56,6 +56,12 @@
 function loadVBot() {
     VBot = {};
     VBot.appData = jQuery.parseJSON(gadgets.views.getParams()['appData']);
+
+    /* XXX FIXME:
+     * In Chrome the following fails with:
+     * [blocked] The page at https://...googleusercontent.../ifr?... ran insecure
+     * content from http://localhost:8080/static/js/hangout.js?_=1359840553691
+     */
     jQuery.getScript(VBot.appData.hangout_javascript_url);
 }
 

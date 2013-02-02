@@ -4,6 +4,10 @@ function hangout() {
     jQuery.getJSON(VBot.appData.activate_session_url,
                    {hangout_url: hangoutUrl},
                    function(data) {
+                       /* XXX FIXME:
+                        * In firefox the following fails with:
+                        * SecurityError The operation is insecure
+                        */
                        VBot.socket = new WebSocket(VBot.appData.websocket_control_url);
                    });
 }
