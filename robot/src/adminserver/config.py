@@ -1,5 +1,5 @@
 ADMINSERVER_HOST = '0.0.0.0'
-ADMINSERVER_PORT = '80'
+ADMINSERVER_PORT = '8081'
 DEBUG = True
 # TODO of course... we should move this all out of temp
 LOG_ROOT = '/tmp/robot_logs'
