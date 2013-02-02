@@ -20,5 +20,6 @@ Starting the websocket server
 -----------------------------
 
 This won't need to be done once the adminserver starts the websocket server
+automatically.
 
     python ~/projects/vistorvebot/robot/src/controlserver/socket_wrapper.py -p 9435 -w . --log_level debug
