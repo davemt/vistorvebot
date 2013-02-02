@@ -72,14 +72,13 @@ function init() {
         function(eventObj) {
             if (eventObj.isApiReady) {
                 console.log("Entering VBot stuff");
-                debugger;
-
-                VBot = VBot || {};
-                VBot.hangout = VBot.hangout || {};
-                VBot.hangout.appData = jQuery.parseJSON(gadgets.views.getParams()['appData']);
+                VBot = VBot || {}; console.log("1");
+                VBot.hangout = VBot.hangout || {}; console.log("2");
+                VBot.hangout.appData = jQuery.parseJSON(gadgets.views.getParams()['appData']); console.log("3");
                 console.log("Got myself a VBot");
 
                 jQuery.getScript(appData.hangout_javascript_url);
+                console.log("got the script");
                 // jQuery.getScript(appData.hangout_javascript_url,
                 //                  function(script, textStatus, jqXHR) {
                 //                      eval(appData.hangout_function+"(appData)");
