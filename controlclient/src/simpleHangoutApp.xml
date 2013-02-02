@@ -72,12 +72,12 @@ function init() {
         function(eventObj) {
             if (eventObj.isApiReady) {
                 console.log("Entering VBot stuff");
+                debugger;
+
                 VBot = VBot || {};
                 VBot.hangout = VBot.hangout || {};
                 VBot.hangout.appData = jQuery.parseJSON(gadgets.views.getParams()['appData']);
                 console.log("Got myself a VBot");
-
-                debugger;
 
                 jQuery.getScript(appData.hangout_javascript_url);
                 // jQuery.getScript(appData.hangout_javascript_url,
