@@ -71,11 +71,15 @@ function init() {
     gapi.hangout.onApiReady.add(
         function(eventObj) {
             if (eventObj.isApiReady) {
-                var appData = jQuery.parseJSON(gadgets.views.getParams()['appData']);
-                jQuery.getScript(appData.hangout_javascript_url,
-                                 function(script, textStatus, jqXHR) {
-                                     eval(appData.hangout_function+"(appData)");
-                                 });
+                VBot = VBot || {};
+                VBot.hangout = VBot.hangout || {};
+                VBot.hangout.appData = jQuery.parseJSON(gadgets.views.getParams()['appData']);
+
+                jQuery.getScript(appData.hangout_javascript_url);
+                #jQuery.getScript(appData.hangout_javascript_url,
+                #                 function(script, textStatus, jqXHR) {
+                #                     eval(appData.hangout_function+"(appData)");
+                #                 });
             }
         });
 }

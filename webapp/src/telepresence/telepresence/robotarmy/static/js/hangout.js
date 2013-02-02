@@ -44,3 +44,4 @@ function showParticipants() {
   div.innerHTML = retVal;
 }
 
+hangout(VBot.hangout.appData);
