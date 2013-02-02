@@ -9,7 +9,8 @@ from multiprocessing import Process
 
 from globalconfig import WEBAPP_HOST, WEBAPP_HEARTBEAT_URL, \
     HEARTBEAT_INTERVAL, WEBAPP_SESSION_ENDED_URL
-from config import WEBAPP_KEY_FILE, HEARTBEATS_PID_FILE, HEARTBEATS_LOGFILE
+from config import WEBAPP_KEY_FILE, HEARTBEATS_PID_FILE, HEARTBEATS_LOGFILE, \
+    ADMINSERVER_PORT
 
 from session import Session
 
@@ -60,7 +61,7 @@ def send_heartbeat():
         #  and 'active' might become false
 
         active = 1 if active else 0
-        params = urllib.urlencode({'key': auth_key, 'active': active})
+        params = urllib.urlencode({'key': auth_key, 'active': active, 'port': ADMINSERVER_PORT})
         url = HEARTBEAT_URL + '?' + params
         try:
             response = urllib2.urlopen(url).read()

@@ -67,6 +67,7 @@ def robot_heartbeat(request):
     if created:
         key = get_random_string(50)
         robot.set_secret_key(key)
+        robot.port = request.GET.get('port', Robot.DEFAULT_PORT)
         ## TODO: Add name here?
         robot.save()
         Robot.objects.update_heartbeat_and_state(ip, Robot.STATE_READY)
@@ -76,10 +77,14 @@ def robot_heartbeat(request):
         key = request.GET.get('key')
         if not robot.check_secret_key(key):
             return HttpResponseUnauthorized()
+        robot.port = request.GET.get('port', robot.port)
+        robot.save()
         if is_active and int(is_active):
             # This does not need to be safe because it should never actually change
             # The state...do we need a query here?
             # TODO: Can this really happen?
+            # TODO: should all metadata info be update here or through regular
+            #       attribute setting
             Robot.objects.update_heartbeat_and_state(ip, Robot.STATE_ACTIVE)
         else:
             Robot.objects.update_heartbeat_and_state(ip, Robot.STATE_READY)
