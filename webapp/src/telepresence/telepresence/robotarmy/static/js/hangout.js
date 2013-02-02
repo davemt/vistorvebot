@@ -1,32 +1,23 @@
-function hangout(appData) {
+function hangout() {
     var hangoutUrl = gapi.hangout.getHangoutUrl();
 
-    // Maybe the returned json from activate_session_url should contain the
-    // websocket url
-
-    console.log(hangoutUrl);
-    jQuery.getJSON(appData.activate_session_url,
+    jQuery.getJSON(VBot.appData.activate_session_url,
                    {hangout_url: hangoutUrl},
                    function(data) {
-                       console.log(appData.websocket_control_url);
-                       socket = new WebSocket(appData.websocket_control_url);
-                       console.log("Opened socket");
-                       jQuery('#hangoutSuccessDiv').text('hanging out: ');
+                       VBot.socket = new WebSocket(VBot.appData.websocket_control_url);
                    });
 }
 
 function vistorveForward() {
-  socket.send("forward");
+  VBot.socket.send("forward");
 }
 
 function vistorveLeft() {
-  socket.send("left");
+  VBot.socket.send("left");
 }
 
 function vistorveRight() {
-  socket.send("right");
+  VBot.socket.send("right");
 }
 
-console.log("in hangout.js");
-console.log(VBot.hangout.appData);
-hangout(VBot.hangout.appData);
+hangout();
