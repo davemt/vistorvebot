@@ -41,7 +41,7 @@
 <script src="https://hangoutsapi.talkgadget.google.com/hangouts/api/hangout.js?v=1.0" ></script>
 <script src="https:///ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
 
-<h3>Simple Hangout App</h3>
+<h3>Vistorve Bot!</h3>
 
 <p>
 <table>
@@ -49,77 +49,28 @@
 <tr><td><input class="button" type="button" value="left" id="vistorveLeft" onClick="vistorveLeft()"></td><td/><td><input class="button" type="button" value="right" id="vistorveRight" onClick="vistorveRight()"><td/>
 </table>
 
-<input class="button" type="button" value="Show participants!" id="showParticipants" 
-    onClick="showParticipants()"/>
-
-<div id="participantsDiv"></div>
-
-<input class="button" type="button" value="Show Hangout URL!" id="showHangoutUrl" 
-    onClick="showHangoutUrl()"/>
-</p>
-
-<div id="hangoutSuccessDiv"></div>
-
-<hr>
-
-<p><a href="http://developers.google.com/+/hangouts/getting-started">Read the docs</a> to learn more about developing hangouts!</a></p>
+<input class="button" type="button" value="loadVBot()!" id="loadVBot" onClick="loadVBot()"/>
 
 <script>
 
-function vistorveForward() {
-  socket.send("VISTORVE.FORWARD");
-}
+function loadVBot() {
+    VBot = {};
+    VBot.appData = jQuery.parseJSON(gadgets.views.getParams()['appData']);
 
-function vistorveLeft() {
-  socket.send("VISTORVE.LEFT");
-}
-
-function vistorveRight() {
-  socket.send("VISTORVE.RIGHT");
-}
-
-function showParticipants() {
-  var participants = gapi.hangout.getParticipants();
-
-  var retVal = '<p>Participants: </p><ul>';
-
-  for (var index in participants) {
-    var participant = participants[index];
-
-    if (!participant.person) {
-      retVal += '<li>A participant not running this app</li>';
-    }
-    retVal += '<li>' + participant.person.displayName + '</li>';
-  }
-
-  retVal += '</ul>';
-
-  var div = document.getElementById('participantsDiv');
-
-  div.innerHTML = retVal;
-}
-
-function showHangoutUrl() {
-  var hangoutUrl = gapi.hangout.getHangoutUrl(),
-      appData = jQuery.parseJSON(gadgets.views.getParams()['appData']);
-
-  
-  socket = new WebSocket(appData.websocket_control_url);
-  jQuery.getJSON(appData.activate_session_url,
-                 {hangout_url: hangoutUrl},
-                 function(data) {
-                   jQuery('#hangoutSuccessDiv').text('hanging out: ');
-                 });
+    /* XXX FIXME:
+     * In Chrome the following fails with:
+     * [blocked] The page at https://...googleusercontent.../ifr?... ran insecure
+     * content from http://localhost:8080/static/js/hangout.js?_=1359840553691
+     */
+    jQuery.getScript(VBot.appData.hangout_javascript_url);
 }
 
 function init() {
-  // When API is ready...                                                         
-  gapi.hangout.onApiReady.add(
-      function(eventObj) {
-        if (eventObj.isApiReady) {
-          showHangoutUrl();
-        }
-      });
+    // When API is ready...
+    gapi.hangout.onApiReady.add(
+        function(eventObj) {
+            if (eventObj.isApiReady) { loadVBot() }
+        });
 }
 
 // Wait for gadget to load.                                                       

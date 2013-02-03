@@ -9,7 +9,7 @@ urlpatterns = patterns('telepresence',
     # CORE
     url(r'^$', 'core.views.index'),
     url(r'^about/', 'core.views.about', name='about-robots'),
-    url(r'^login/$', 'core.views.login_user', name="login"),
+    url(r'^accounts/login/$', 'core.views.login_user', name="login"),
     url(r'^logout/$', 'core.views.logout_user', name="logout"),
     # ADMIN
     url(r'^admin/', include(admin.site.urls)),

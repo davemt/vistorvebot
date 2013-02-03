@@ -30,16 +30,19 @@ class Robot(models.Model):
         # (STATE_SLEEPING, "zzzzzzzZZzzz"),
     )
 
+    DEFAULT_PORT = 80
+
     state = models.CharField(max_length=10, default=STATE_READY, choices=STATE_CHOICES)
     last_state_change = models.DateTimeField(auto_now=True)
     last_heartbeat = models.DateTimeField(null=True, blank=True)
     secret_key = models.CharField(max_length=128)
     ip = models.IPAddressField(unique=True)
+    port = models.IntegerField(default=DEFAULT_PORT)
 
     objects = RobotManager()
 
     def __unicode__(self):
-        return self.ip
+        return self.ip + ":" + str(self.port)
 
     def set_secret_key(self, raw_key):
         self.secret_key = make_password(raw_key)
@@ -79,18 +82,23 @@ class Robot(models.Model):
         return self.state
 
     @property
+    def url_root(self):
+        return "http://" + self.ip + ":" + str(self.port)
+
+    @property
     def initialize_session_url(self):
-        return "http://" + self.ip + globalconfig.INITIALIZE_SESSION_METHOD
+        return self.url_root + globalconfig.INITIALIZE_SESSION_METHOD
 
     def get_activate_session_url(self, session_id):
-        url = "http://" + self.ip + globalconfig.ACTIVATE_SESSION_METHOD + "%s/"
+        url = self.url_root + globalconfig.ACTIVATE_SESSION_METHOD + "%s/"
         return url % session_id
 
-    def get_websocket_control_url(self, session_id):
-        url = "ws://" + self.ip + "/control"
+    @property
+    def websocket_control_url(self):
+        url = "ws://" + self.ip + ":9435/control"
         return url
 
-    def initialize_session(self):
+    def initialize_session(self, request):
         """Makes a request to the robot for a new session id and returns the
         hangout URL with the session_id and the robout URL passed as params"""
         try:
@@ -120,6 +128,8 @@ class Robot(models.Model):
         return {
             "error": False,
             "activate_session_url": self.get_activate_session_url(sid),
-            "websocket_control_url": self.get_websocket_control_url(sid),
+            "websocket_control_url": self.websocket_control_url,
+            "hangout_javascript_url": globalconfig.WEBAPP_HOST + globalconfig.HANGOUT_JAVASCRIPT_URL,
+            "hangout_function": "hangout",
             "sid": sid,
          }
