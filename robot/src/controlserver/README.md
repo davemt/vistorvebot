@@ -13,3 +13,7 @@ Once you've started up the server, you can send messages to it by using the cons
 http://localhost:9435/console.html
 
 Click "connect" to start the connection and then send messages!
+
+You have access to any of the control methods listed in `RobotControl` which
+lives in `pyrobot/control.py`. Initially, these include forward, backward,
+left_in_place, and right_in_place.

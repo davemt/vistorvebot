@@ -4,16 +4,23 @@ import base as robotbase
 ## TODO: Should this live in globalconfig
 COMMAND_INTERVAL = .5
 
-def run_robot_command(robot_obj, line):
+def run_robot_command(robot_obj, line, request):
     """Parses the command from the web socket and runs it on our robot object"""
     command = line.rstrip().split(None)
-    method = getattr(robot_obj, command[0])
+    try:
+        method = getattr(robot_obj, command[0])
+    except AttributeError:
+        request.ws_stream.send_message("ERROR: Unrecognized Command: %s" % command[0])
+        return
     method(*command[1:])
+    request.ws_stream.send_message("OK: %s with args: %s" %
+                         (command[0], str(command[1:])))
 
 class RobotControl(object):
     def __init__(self):
         self.timer = self._generate_timer()
-        self.robot = robotbase.Create('/dev/ttyUSB1')
+        ## TODO: Attempt to autodetect usb port (ls /dev/tty*)
+        self.robot = robotbase.Create('/dev/ttyUSB0')
         self.robot.SoftReset()
         self._ensure_control_mode()
 
@@ -43,9 +50,25 @@ class RobotControl(object):
         self._prepare_action_method()
         self.robot.DriveStraight(velocity)
 
+    def forward_right(self, velocity=robotbase.VELOCITY_FAST, radius=robotbase.RADIUS_RIGHT):
+        self._prepare_action_method()
+        self.robot.Drive(velocity, radius)
+
+    def forward_left(self, velocity=robotbase.VELOCITY_FAST, radius=robotbase.RADIUS_LEFT):
+        self._prepare_action_method()
+        self.robot.Drive(velocity, radius)
+
     def backward(self, velocity=robotbase.VELOCITY_FAST):
         self._prepare_action_method()
         self.robot.DriveStraight(-velocity)
+
+    def backward_right(self, velocity=robotbase.VELOCITY_FAST, radius=robotbase.RADIUS_RIGHT):
+        self._prepare_action_method()
+        self.robot.Drive(-velocity, radius)
+
+    def backward_left(self, velocity=robotbase.VELOCITY_FAST, radius=robotbase.RADIUS_LEFT):
+        self._prepare_action_method()
+        self.robot.Drive(-velocity, radius)
 
     def left_in_place(self, velocity=robotbase.VELOCITY_SLOW):
         self._prepare_action_method()

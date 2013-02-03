@@ -201,6 +201,9 @@ VELOCITY_MAX = 500  # mm/s
 VELOCITY_SLOW = int(VELOCITY_MAX * 0.33)
 VELOCITY_FAST = int(VELOCITY_MAX * 0.66)
 
+RADIUS_RIGHT = -200
+RADIUS_LEFT = 200
+
 WHEEL_SEPARATION = 298  # mm
 
 SERIAL_TIMEOUT = 2  # Number of seconds to wait for reads. 2 is generous.

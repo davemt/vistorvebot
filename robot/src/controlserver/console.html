@@ -41,6 +41,8 @@ on the middle textarea.
 <html>
 <head>
 <title>WebSocket console</title>
+<script src="http:///ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<script src="robot-control.js"></script>
 <script>
 var socket = null;
 
@@ -195,6 +197,9 @@ function init() {
     addToLog('WebSocket is not available');
   }
 }
+$(document).ready(function (){
+                  $('#robotControl').robotControl();
+});
 </script>
 </head>
 <body onload="init()">
@@ -240,6 +245,22 @@ Code <input type="text" id="code" size="10">
 Reason <input type="text" id="reason" size="20">
 <input type="submit" value="close">
 </form>
+
+<div id="robotControl">
+  <table>
+    <tr><td></td><td><input type="button" value="Forward" class="forward"></td><td></td></tr>
+    <tr>
+      <td>
+        <input type="button" value="Left" class="left">
+      </td>
+      <td></td>
+      <td>
+        <input type="button" value="Right" class="right">
+      </td>
+    </tr>
+    <tr><td></td><td><input type="button" value="Backward" class="backward"></td><td></td></tr>
+  </table>
+</div>
 
 </body>
 </html>

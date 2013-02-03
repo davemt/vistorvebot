@@ -79,7 +79,7 @@ def web_socket_transfer_data(request):
     """
     while True:
         line = request.ws_stream.receive_message()
-        pyrobot.run_robot_command(ROBOT, line)
+        pyrobot.run_robot_command(ROBOT, line, request)
 
 def web_socket_passive_closing_handshake(request):
     """web_socket_passive_closing_handshake is called after the server receives
