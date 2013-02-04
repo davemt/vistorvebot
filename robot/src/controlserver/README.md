@@ -4,9 +4,13 @@ Control Server
 Currently we'll use pywebsocket to handle the requests coming from the google
 app (control client). First you will need to download the source and
 run ``setup.py`` build and then ``sudo setup.py install`` python. After you've
-done that, you can start the socket with:
+done that, you can start the socket with::
 
-python socket_wrapper.py -p 9435 -w . --log_level debug
+  python socket_wrapper.py -p 9435 -w . --log_level debug
+
+Couldn't we just run the following without the wrapper?::
+
+  python -m mod_pywebsocket.standalone -p 9435 -w . --log_level debug
 
 Once you've started up the server, you can send messages to it by using the console:
 
