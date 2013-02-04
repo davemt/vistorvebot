@@ -9,7 +9,7 @@
         errorHandler: function (errorText){console.log('ERROR:' + errorText);},
         messageHandler: function (messageText){console.log('MESSAGE:' + messageText);},
         controlServer: 'ws://localhost:9435/control',
-        commandInterval: 500, // Length of time each command runs
+        commandInterval: 100, // Length of time each command runs
         responseCodes: {error: 'ERROR', success: 'OK'},
         buttons: {
             forward: {selector: '.forward', keyCode: 38, mask: 0x1},
@@ -32,7 +32,7 @@
                     $this.data('robotControl', {
                         commandInterval : settings.commandInterval,
                         controlServer : settings.controlServer,
-                        errorHandler: settings.onError,
+                        errorHandler: settings.errorHandler,
                         messageHandler: settings.messageHandler,
                         buttons: settings.buttons,
                         responseCodes: settings.responseCodes,
@@ -53,8 +53,8 @@
                 // This maps our button combinations onto commands to send the socket
                 commands[buttons.forward.mask] = 'forward';
                 commands[buttons.backward.mask] = 'backward';
-                commands[buttons.right.mask] = 'right';
-                commands[buttons.left.mask] = 'left';
+                commands[buttons.right.mask] = 'right_in_place';
+                commands[buttons.left.mask] = 'left_in_place';
                 commands[buttons.forward.mask | buttons.right.mask] = 'forward_right';
                 commands[buttons.forward.mask | buttons.left.mask] = 'forward_left';
                 commands[buttons.backward.mask | buttons.right.mask] = 'backward_right';
@@ -84,7 +84,7 @@
                 data.interval = setInterval(function (){
                     var command = data.commands[data.currentCommand];
                     if(command){
-                        methods.sendMessage.apply(that, command);
+                        methods.sendMessage.apply(that, [command]);
                         console.log(command);
                     };
                 }, data.commandInterval);

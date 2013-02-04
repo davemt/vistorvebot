@@ -2,7 +2,7 @@ import threading
 import base as robotbase
 
 ## TODO: Should this live in globalconfig
-COMMAND_INTERVAL = .5
+COMMAND_INTERVAL = .1
 
 def run_robot_command(robot_obj, line, request):
     """Parses the command from the web socket and runs it on our robot object"""
