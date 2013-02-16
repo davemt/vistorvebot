@@ -14,6 +14,10 @@ CONTROL_SERVER_SCRIPT = os.environ['VBOT_CONTROL_SERVER_SCRIPT']
 CONTROL_SERVER_LOG_FILE = '%s/controlserver.log' % LOG_ROOT
 CONTROL_SERVER_PID_FILE = '%s/controlserver.pid' % VBOT_HOME
 
+# TODO: Put these someplace that makes sense
+TLS_KEY_PATH = '../controlserver/server.key'
+TLS_CERT_PATH = '../controlserver/server.crt'
+
 if not os.path.exists(VBOT_HOME):
     os.makedirs(VBOT_HOME)
 if not os.path.exists(LOG_ROOT):

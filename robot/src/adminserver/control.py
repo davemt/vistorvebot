@@ -12,7 +12,10 @@ def start_controlserver():
         raise IOError("Could not locate controlserver script at %s." % script)
     port = CONTROL_SERVER_PORT
     logfile = config.CONTROL_SERVER_LOG_FILE
-    cmd = 'python %s -p %s -w . --log_level debug -l %s' % (script, port, logfile)
+    key = config.TLS_KEY_PATH
+    cert = config.TLS_CERT_PATH
+    cmd = 'python %s -p %s -w -t -k %s -c %s . --log_level debug -l %s' % (
+        script, port, key, cert, logfile)
     p = Popen(shlex.split(cmd))
     f = open(config.CONTROL_SERVER_PID_FILE, 'w')
     f.write(str(p.pid) + '\n')
