@@ -1,4 +1,7 @@
-# hangouts
-selenium
 # adminserver
 bottle==0.10.11
+selenium
+
+# controlserver
+mod-pywebsocket==0.6b1
+pyserial==2.6

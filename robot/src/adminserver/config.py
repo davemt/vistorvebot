@@ -10,6 +10,9 @@ SESSION_DIR = '%s/active_session' % VBOT_HOME
 WEBAPP_KEY_FILE = '%s/webapp_key' % VBOT_HOME
 HEARTBEATS_PID_FILE = '%s/heartbeats.pid' % VBOT_HOME
 HEARTBEATS_LOGFILE = '%s/heartbeats.log' % LOG_ROOT
+CONTROL_SERVER_SCRIPT = os.environ['VBOT_CONTROL_SERVER_SCRIPT']
+CONTROL_SERVER_LOG_FILE = '%s/controlserver.log' % LOG_ROOT
+CONTROL_SERVER_PID_FILE = '%s/controlserver.pid' % VBOT_HOME
 
 if not os.path.exists(VBOT_HOME):
     os.makedirs(VBOT_HOME)

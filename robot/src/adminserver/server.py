@@ -1,9 +1,11 @@
 from bottle import route, run, request, abort
+import logging
 
 import config
 from multiprocessing import Process
 from session import Session, SessionConflict, SessionDoesNotExist
 from hangouts import start_hangout, stop_hangout
+import control
 import heartbeats
 
 @route('/new_session/')
@@ -36,8 +38,14 @@ def begin_control(sid):
     if not url:
         abort(400, "Get parameter 'hangout_url' is required.")
 
-    p = Process(target=start_hangout, name="selenium-hangout", args=[url, sid])
+    # start the Google hangout
+    logging.info("Starting selenium to join Google hangout...")
+    p = Process(target=start_hangout, name='selenium-hangout', args=[url, sid])
     p.start()
+
+    # start the control server (websocket server)
+    logging.info("Starting control server (websocket server)...")
+    control.start_controlserver()
 
     return {'message': "Control is starting; joining the hangout."}
 
@@ -54,6 +62,7 @@ def end_session(sid):
         session = Session(sid)
         port = session.get('hangout_control_port')
         session.close()
+        control.stop_controlserver()
         stop_hangout(port)
         heartbeats.send_session_ended()
         return {'message': "Session ended successfully."}
@@ -77,7 +86,7 @@ if __name__ == '__main__':
     options, args = parser.parse_args()
 
     if options.heartbeats:
-        print("Starting heartbeat sender process, logging to %s...\n" %
+        print("Starting heartbeat sender process, logging to %s..." %
               config.HEARTBEATS_LOGFILE)
         # start the periodic heartbeat sender
         heartbeats.start()
