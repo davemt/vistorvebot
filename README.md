@@ -7,7 +7,7 @@ Starting the webapp
 -------------------
 
     source ~/virtualenvs/vistorveapp/bin/activate
-    python ~/projects/vistorvebot/webapp/src/telepresence/manage.py runserver 0.0.00:8080
+    python ~/projects/vistorvebot/webapp/src/telepresence/manage.py runserver 0.0.0.0:8080
 
 
 Starting the robot adminserver

@@ -1,4 +1,4 @@
-WEBAPP_HOST = "http://localhost:8080"
+WEBAPP_HOST = "https://telepresence.compete.com"
 
 INITIALIZE_SESSION_METHOD = "/new_session/"
 ACTIVATE_SESSION_METHOD = "/begin_control/"

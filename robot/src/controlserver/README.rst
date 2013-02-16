@@ -18,7 +18,7 @@ could not import pyrobot.
 
 Once you've started up the server, you can send messages to it by using the console:
 
-http://localhost:9435/console.html
+https://localhost:9435/console.html
 
 Click "connect" to start the connection and then send messages!
 

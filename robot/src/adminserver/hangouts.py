@@ -40,7 +40,7 @@ def stop_hangout(control_port):
     """Stop the active google hangout session."""
     try:
         # shutdown chromedriver
-        urllib2.urlopen("http://127.0.0.1:%s/shutdown" % control_port)
+        urllib2.urlopen("https://127.0.0.1:%s/shutdown" % control_port)
     except urllib2.URLError:
         # TODO handle
         raise

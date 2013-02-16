@@ -83,7 +83,7 @@ class Robot(models.Model):
 
     @property
     def url_root(self):
-        return "http://" + self.ip + ":" + str(self.port)
+        return "https://" + self.ip + ":" + str(self.port)
 
     @property
     def initialize_session_url(self):
@@ -95,7 +95,7 @@ class Robot(models.Model):
 
     @property
     def websocket_control_url(self):
-        url = "ws://" + self.ip + ":9435/control"
+        url = "wss://" + self.ip + ":9435/control"
         return url
 
     def initialize_session(self, request):
