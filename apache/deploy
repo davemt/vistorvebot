@@ -1,0 +1,13 @@
+# as root
+rm -r /var/www/telepresence.compete.com/
+cp -RL ~/projects/vistorvebot/webapp/src/telepresence /var/www/telepresence.compete.com
+virtualenv --no-site-packages /var/www/telepresence.compete.com/venv
+source /var/www/telepresence.compete.com/venv/bin/activate
+pip install -r ~/projects/vistorvebot/webapp/requirements.txt
+edit /var/www/telepresence.compete.com/telepresence/localsettings.py
+
+#DB_PATH = '/var/www/telepresence.compete.com/telepresence.db'
+#STATIC_ROOT = '/var/www/telepresence.compete.com/static'
+
+python /var/www/telepresence.compete.com/manage.py collectstatic
+python /var/www/telepresence.compete.com/manage.py syncdb
