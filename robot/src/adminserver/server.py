@@ -2,7 +2,7 @@ from bottle import route, run, request, abort
 
 import config
 from multiprocessing import Process
-from session import Session, SessionConflict
+from session import Session, SessionConflict, SessionDoesNotExist
 from hangouts import start_hangout, stop_hangout
 import heartbeats
 
@@ -22,10 +22,15 @@ def new_session():
 def begin_control(sid):
     """Begin the robot control session. Requires the GET parameter
     'hangout_url' to join the control hangout."""
+    #
+    # TODO this can be called repeatedly and opens up multiple selenium hangouts!
+    #
     try:
         Session(sid)
     except SessionConflict, e:
         abort(409, str(e))
+    except SessionDoesNotExist, e:
+        abort(404, "Requested session does not exist.")
 
     url = request.params.get('hangout_url')
     if not url:
@@ -54,6 +59,8 @@ def end_session(sid):
         return {'message': "Session ended successfully."}
     except SessionConflict, e:
         abort(409, "Unable to end control session: %s" % str(e))
+    except SessionDoesNotExist:
+        abort(404, "Requested session does not exist.")
 
 
 if __name__ == '__main__':
