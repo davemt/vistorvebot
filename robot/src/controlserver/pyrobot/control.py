@@ -2,7 +2,7 @@ import threading
 import base as robotbase
 
 ## TODO: Should this live in globalconfig
-COMMAND_INTERVAL = .1
+COMMAND_INTERVAL = .05
 
 def run_robot_command(robot_obj, line, request):
     """Parses the command from the web socket and runs it on our robot object"""
@@ -81,6 +81,10 @@ class RobotControl(object):
     def stop(self):
         self._ensure_control_mode()
         self.robot.Stop()
+
+    def find_dock(self):
+        self._ensure_control_mode()
+        self.robot.Dock()
 
     def print_args(self, *args):
         """A test function to make sure the web socket is working"""

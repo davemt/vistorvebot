@@ -9,13 +9,14 @@
         errorHandler: function (errorText){console.log('ERROR:' + errorText);},
         messageHandler: function (messageText){console.log('MESSAGE:' + messageText);},
         controlServer: 'ws://localhost:9435/control',
-        commandInterval: 100, // Length of time each command runs
+        commandInterval: 50, // Length of time each command runs
         responseCodes: {error: 'ERROR', success: 'OK'},
         buttons: {
             forward: {selector: '.forward', keyCode: 38, mask: 0x1},
             backward: {selector: '.backward', keyCode: 40, mask: 0x8},
             left: {selector: '.left', keyCode: 37, mask: 0x4},
-            right: {selector: '.right', keyCode: 39, mask: 0x2}
+            right: {selector: '.right', keyCode: 39, mask: 0x2},
+            find_dock: {selector: '.dock', keyCode: 100, mask: 0x16}
         }
     };
 
@@ -55,11 +56,11 @@
                 commands[buttons.backward.mask] = 'backward';
                 commands[buttons.right.mask] = 'right_in_place';
                 commands[buttons.left.mask] = 'left_in_place';
+                commands[buttons.find_dock.mask] = 'find_dock';
                 commands[buttons.forward.mask | buttons.right.mask] = 'forward_right';
                 commands[buttons.forward.mask | buttons.left.mask] = 'forward_left';
                 commands[buttons.backward.mask | buttons.right.mask] = 'backward_right';
                 commands[buttons.backward.mask | buttons.left.mask] = 'backward_left';
-
                 data.commands = commands;
             });
         },
