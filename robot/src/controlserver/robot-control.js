@@ -8,7 +8,7 @@
     var defaults = {
         errorHandler: function (errorText){console.log('ERROR:' + errorText);},
         messageHandler: function (messageText){console.log('MESSAGE:' + messageText);},
-        controlServer: 'ws://localhost:9435/control',
+        controlServer: 'wss://localhost:9435/control',
         commandInterval: 50, // Length of time each command runs
         responseCodes: {error: 'ERROR', success: 'OK'},
         buttons: {
