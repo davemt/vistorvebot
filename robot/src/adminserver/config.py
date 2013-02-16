@@ -1,13 +1,20 @@
+import os
+
 ADMINSERVER_HOST = '0.0.0.0'
 ADMINSERVER_PORT = '8081'
 DEBUG = True
-# TODO of course... we should move this all out of temp
-LOG_ROOT = '/tmp/robot_logs'
-SESSION_DIR = '/tmp/robot_session'
-WEBAPP_KEY_FILE = '/tmp/robot_webapp_key'
-HEARTBEATS_PID_FILE = '/tmp/robot_heartbeats.pid'
+# TODO different placement of these files
+VBOT_HOME = '/tmp/vbot'
+LOG_ROOT = '%s/log' % VBOT_HOME
+SESSION_DIR = '%s/active_session' % VBOT_HOME
+WEBAPP_KEY_FILE = '%s/webapp_key' % VBOT_HOME
+HEARTBEATS_PID_FILE = '%s/heartbeats.pid' % VBOT_HOME
 HEARTBEATS_LOGFILE = '%s/heartbeats.log' % LOG_ROOT
+CONTROL_SERVER_SCRIPT = os.environ['VBOT_CONTROL_SERVER_SCRIPT']
+CONTROL_SERVER_LOG_FILE = '%s/controlserver.log' % LOG_ROOT
+CONTROL_SERVER_PID_FILE = '%s/controlserver.pid' % VBOT_HOME
 
-import os
+if not os.path.exists(VBOT_HOME):
+    os.makedirs(VBOT_HOME)
 if not os.path.exists(LOG_ROOT):
     os.makedirs(LOG_ROOT)

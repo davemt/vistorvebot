@@ -26,6 +26,10 @@ PASSWORD = 'selenium'
 
 def start_hangout(url, robot_sid):
     """Start google hangout in a selenium chromebrowser instance."""
+    #
+    # TODO if we have no network at this point, we fail, then never get a
+    #  control port and can't close the selenium hangout
+    #
     hangout = HangoutSession()
     robot_session = RobotSession(robot_sid)
     robot_session.set('hangout_control_port', hangout.driver.service.port)
