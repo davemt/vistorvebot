@@ -63,6 +63,10 @@ if __name__ == '__main__':
                       action="store_true", default=True,
                       help="Do not start the heartbeat process to send "
                            "periodic heartbeats to the webapp.")
+    parser.add_option('-c', '--cleanup-session', dest='cleanup_session',
+                      action="store_true", default=False,
+                      help="Delete any stored session state when server "
+                           "starts up.")
     options, args = parser.parse_args()
 
     if options.heartbeats:
@@ -70,6 +74,11 @@ if __name__ == '__main__':
               config.HEARTBEATS_LOGFILE)
         # start the periodic heartbeat sender
         heartbeats.start()
+
+    if options.cleanup_session:
+        # delete any stored session state
+        print("Deleting existing session state...")
+        Session.full_cleanup()
 
     # start the admin server
     run(host=config.ADMINSERVER_HOST, port=config.ADMINSERVER_PORT)

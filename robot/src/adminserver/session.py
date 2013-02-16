@@ -91,6 +91,8 @@ class Session(object):
         return value
 
     def close(self):
+        """Close the session atomically, to avoid conflicts with another
+        session that is started right away."""
         # The following race condition is possible:
         #  1) We attempt to close session
         #  2) Session id matches and we're granted permission to close
@@ -101,8 +103,15 @@ class Session(object):
         #  7) We still have permission, so we then delete the wrong session
         #     directory!
 
-        # close the session with an atomic rename, then clean up
+        # close the session with an atomic rename, then recursively delete files
         os.rename(self.directory, self.directory + self.sid)
         shutil.rmtree(self.directory + self.sid)
 
-
+    @staticmethod
+    def full_cleanup(session_dir=config.SESSION_DIR):
+        """Delete any stored state for the active session (or do nothing, if no
+        active session exists).  This should be used for administrative/
+        debugging purposes, as there is no conflict-avoidance or verification of
+        active session by sid."""
+        if os.path.isdir(session_dir):
+            shutil.rmtree(session_dir)
