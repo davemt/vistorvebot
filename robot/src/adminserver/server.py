@@ -59,16 +59,17 @@ def end_session(sid):
 if __name__ == '__main__':
     from optparse import OptionParser
     parser = OptionParser(usage="usage: python %prog [options]")
-    parser.add_option('-s', '--send-heartbeats', dest="heartbeats",
-                      action="store_true",
-                      help="Start a heartbeat process to send periodic "
-                           "heartbeats to to the webapp.")
+    parser.add_option('-H', '--no-heartbeats', dest='heartbeats',
+                      action="store_true", default=True,
+                      help="Do not start the heartbeat process to send "
+                           "periodic heartbeats to the webapp.")
     options, args = parser.parse_args()
+
     if options.heartbeats:
         print("Starting heartbeat sender process, logging to %s...\n" %
               config.HEARTBEATS_LOGFILE)
         # start the periodic heartbeat sender
         heartbeats.start()
+
     # start the admin server
     run(host=config.ADMINSERVER_HOST, port=config.ADMINSERVER_PORT)
-
